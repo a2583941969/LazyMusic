@@ -12,6 +12,7 @@
 		</view>
 		<!-- 测试组件 -->
 		<my-tabbar active="首页"></my-tabbar>
+		<AlbumPlay></AlbumPlay>
 	</view>
 </template>
 
