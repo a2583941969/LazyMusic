@@ -8,7 +8,7 @@
 		</view>
 		<!-- 轮播图 -->
 		<view class="banner">
-			<swiper circular="true" :autoplay="true" :interval="3000" :duration="1000">
+			<swiper circular="true" show-scrollbar="false" :autoplay="true" :interval="3000" :duration="1000">
 				<swiper-item v-for="(item,i) of banners" :key="i">
 					<view class="swiper-item">
 						<image :src="item" mode="widthFix"></image>
@@ -16,12 +16,50 @@
 				</swiper-item>
 			</swiper>
 		</view>
-		<!-- 最新专辑与推荐歌单 -->
-		<view class="	">
-			
+		<!-- 最新专辑 -->
+		<view class="recommends sort">
+			<view class="sort-title">
+				<text>最新专辑</text>
+				<text>更多</text>
+			</view>
+			<scroll-view scroll-x="true">
+				<view class="recommends-list">
+					<block v-for="(item,i) of recommends" :key="i">
+						<my-alnum :name="item.name" :id="item.id" :page_img="item.picUrl" :chanteur="item.artist.name" :total_songs="item.trackCount"></my-alnum>
+					</block>
+				</view>
+			</scroll-view>
 		</view>
+		<!-- 推荐歌单 -->
+		<view class="recommends sort">
+			<view class="sort-title">
+				<text>推荐歌单</text>
+				<text>更多</text>
+			</view>
+			<scroll-view scroll-x="true">
+				<view class="recommends-list">
+					<block v-for="(item,i) of playlist" :key="i">
+						<my-alnum :name="item.name" :id="item.id" :page_img="item.picUrl" :total_songs="item.trackCount"></my-alnum>
+					</block>
+				</view>
+			</scroll-view>
+		</view>
+		<!-- 推荐歌手 -->
+		<view class="recommends sort">
+			<view class="sort-title">
+				<text>推荐歌手</text>
+				<text>更多</text>
+			</view>
+			<scroll-view scroll-x="true">
+				<view class="recommends-list">
+					<block v-for="(item,i) of singers" :key="i">
+						<my-live-band :SingerAvatar="item.picUrl" :LeighNash="item.name" :collectNum="item.collectNum" :singerId="item.id"></my-live-band>
+					</block>
+				</view>
+			</scroll-view>
+		</view>
+		<AlbumPlay class="index-albumplay"></AlbumPlay>
 		<my-tabbar active="首页"></my-tabbar>
-		<AlbumPlay></AlbumPlay>
 	</view>
 </template>
 
@@ -29,12 +67,13 @@
 	import myAlnum from "../../myComponents/my-alnum/myAlnum.vue"
 	import mySonglist from "../../myComponents/my-songlist/mySongList.vue"
 	import myTabbar from "../../myComponents/my-tabbar/myTabbar.vue"
-
+	import myLiveBand from "../../myComponents/my-LiveBand/myLiveBand.vue"
 	export default {
 		components: {
 			myAlnum,
 			mySonglist,
-			myTabbar
+			myTabbar,
+			myLiveBand
 		},
 		data() {
 			return {
@@ -48,14 +87,22 @@
 					"https://img01.dmhmusic.com/0412/M00/3A/0E/ChAKEV9a43CAZVQPAACv9HNmpto558.jpg",
 					"https://img01.dmhmusic.com/0412/M00/44/B1/ChAKEl9gJ3qAV6icAAHLgPaRlDE654.jpg"
 				],
-				// 推荐歌单与专辑
-				recommends:[]
+				// 推荐专辑
+				recommends: [],
+				// 推荐歌单
+				playlist: [],
+				// 推荐歌手
+				singers: []
 			}
 		},
 		methods: {
 			// 封装请求方法
-			 getMsg({url,method="get",data}) {
-				return  this.$myReq({
+			getMsg({
+				url,
+				method = "get",
+				data
+			}) {
+				return this.$myReq({
 					url,
 					method,
 					data,
@@ -70,20 +117,79 @@
 			}
 		},
 		mounted() {
-			// 请求数据
-			this.getMsg({url:"album/newest"}).then(res=>{
-				this.recommends.push(res.data.albums)
-				console.log(res)
+			// 请求最新专辑数据
+			this.getMsg({
+				url: "album/newest"
+			}).then(res => {
+				res.data.albums.forEach(({
+					id,
+					name,
+					picUrl,
+					trackCount,
+					artist
+				}) => {
+					let obj = {
+						id,
+						name,
+						picUrl: picUrl + "?imageView=1&type=webp&thumbnail=369x0",
+						artist,
+						trackCount
+					}
+					this.recommends.push(obj)
+				})
 			})
-			this.getMsg({url:"personalized",data:{limit:10}}).then(res=>{
-				this.recommends.push(res.data.result)
-				console.log(this.recommends)
+			// 请求推荐专辑数据
+			this.getMsg({
+				url: "personalized",
+				data: {
+					limit: 10
+				}
+			}).then(res => {
+				res.data.result.forEach(({
+					id,
+					name,
+					picUrl,
+					trackCount,
+				}) => {
+					let obj = {
+						id,
+						name,
+						picUrl: picUrl + "?imageView=1&type=webp&thumbnail=369x0",
+						trackCount
+					}
+					this.playlist.push(obj)
+				})
+			})
+			// 请求推荐歌手数据
+			this.getMsg({
+				url: "top/artists",
+				data: {
+					offset: 0,
+					limit: 10
+				}
+			}).then(res => {
+				console.log(res)
+				res.data.artists.forEach(({id,name,picUrl})=>{
+					let obj={
+						id,
+						name,
+						picUrl:picUrl+"?imageView=1&type=webp&thumbnail=369x0",
+						collectNum:Math.floor(Math.random()*200+10)
+						
+					}
+					this.singers.push(obj)
+					console.log(obj)
+				})
 			})
 		}
 	}
 </script>
 
 <style>
+	view.index {
+		padding-bottom: 190rpx;
+	}
+
 	view.index>view.inputbox {
 		border: 1px solid gray;
 		padding: 22rpx 15rpx;
@@ -100,6 +206,7 @@
 		display: flex;
 		align-items: center;
 	}
+
 	view.index>view.inputbox>view.input::before {
 		content: '';
 		display: inline-block;
@@ -109,13 +216,50 @@
 		background-size: cover;
 		margin: 0 20rpx;
 	}
-	view.banner{
+
+	view.banner {
 		padding: 0 20rpx;
+		margin-bottom: 70rpx
 	}
-	
-	view.banner image{
+
+	view.banner image {
 		width: 100%;
 		border-radius: 10rpx;
 	}
-	
+
+	view.sort {
+		padding: 0 55rpx;
+		margin-bottom: 70rpx;
+	}
+
+	view.sort-title {
+		display: flex;
+		justify-content: space-between;
+		color: #333;
+		align-items: center;
+		margin-bottom: 20rpx;
+	}
+
+	view.sort-title>text:first-child {
+		font-weight: 700;
+		font-size: 40rpx;
+		letter-spacing: 3;
+	}
+
+	view.sort-title>text:last-child {
+		font-size: 30rpx;
+		color: #666;
+	}
+
+	view.recommends view.recommends-list {
+		display: flex;
+		float: left;
+	}
+
+	view.index view.index-albumplay {
+		position: fixed;
+		bottom: 110rpx;
+		left: 0;
+		z-index: 100;
+	}
 </style>

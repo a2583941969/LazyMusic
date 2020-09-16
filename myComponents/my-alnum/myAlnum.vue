@@ -1,16 +1,16 @@
 <template>
 	<view class="album">
-		<navigator @click="goto" hover-class="none" animation-type="none">
+		<view @click="goto" hover-class="none" animation-type="none">
 			<view>
 				<image :src="page_img" mode="widthFix"></image>
-				<view class="btn" @click="playThisAlnum">
+				<view class="btn" @click.stop="playThisAlnum">
 				</view>
 			</view>
 			<view class="album_info">
 				<text class="title">{{name}}</text>
 				<text class="author">{{total_songs?total_songs+'首单曲':chanteur}}</text>
 			</view>
-		</navigator>
+		</view>
 	</view>
 </template>
 
@@ -22,7 +22,7 @@
 		//  total_songs歌曲总数      
 		//  id         当前歌单/专辑的id   
 		//  bool       显示专辑或歌单的bool值
-		props: ["name", "page_img", "chanteur", "total_songs", "id", "bool"],
+		props: ["name", "page_img", "chanteur", "total_songs", "id"],
 		data() {
 			return {
 				
@@ -51,13 +51,13 @@
 		margin-right: 20rpx;
 	}
 
-	view.album>navigator image {
+	view.album>view image {
 		width: 100%;
 	}
 view.album view{
 	position: relative;
 }
-view.album>navigator>view>view.btn{
+view.album>view>view>view.btn{
 	position: absolute;
 	bottom: 20rpx;
 	right: 20rpx;
@@ -69,21 +69,20 @@ view.album>navigator>view>view.btn{
 	z-index: 20;
 }
 
-	view.album>navigator>view.album_info {
+	view.album>view>view.album_info {
 		display: flex;
 		margin-top: 24rpx;
 		flex-direction: column;
 	}
 
-	view.album>navigator>view.album_info>text.title {
+	view.album>view>view.album_info>text.title {
 		font-size: 28rpx;
 		font-weight: 900;
 		text-overflow:ellipsis; 
-		overflow: hidden;    
-		text-overflow:ellipsis;    
-		whitewhite-space: nowrap;
+		overflow: hidden;
+		white-space: nowrap;
 	}
-	view.album>navigator>view.album_info>text.author {
+	view.album>view>view.album_info>text.author {
 		font-size: 24rpx;
 		color: #666;
 		margin-top: 12rpx;

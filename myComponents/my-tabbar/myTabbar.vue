@@ -44,6 +44,8 @@
 <style>
 	view.tabbar {
 		width: 750rpx;
+		height: 110rpx;
+		box-sizing: border-box;
 		border-top: 1px solid #ccc;
 		background-color: #fff;
 		display: flex;

@@ -6,7 +6,7 @@
       <navigator url="">
         <!-- 歌手头像 -->
         <view class="Singer-avatar">
-          <image :src="SingerAvatar" mode="widthFix"></image>
+          <image :src="SingerAvatar"></image>
         </view>
         <!-- 歌手名字 -->
         <view class="Leigh-Nash">{{LeighNash}}</view>
@@ -15,7 +15,7 @@
       </navigator>
       <!-- 收藏按钮 -->
       <view class="collect">
-        <text :class="{collectActive:collect}">{{collect?"已收藏":"收藏"}}</text>
+        <text :class="{collectActive:collect}">{{collect?"已":""}}收藏</text>
       </view>
     </view>
   </view>
@@ -40,7 +40,7 @@
 <style>
   .Live-Band>.Singer-info {
     width: 196rpx;
-    height: 314rpx;
+		margin-right: 25rpx;
   }
 
   .Live-Band>.Singer-info>navigator>.Singer-avatar {
@@ -52,7 +52,7 @@
 
   .Live-Band>.Singer-info>navigator>.Singer-avatar>image {
     width: 100%;
-    height: 100%;
+    height: 100%;	
   }
 
   .Live-Band>.Singer-info>navigator>.Leigh-Nash {
@@ -84,6 +84,8 @@
     border: 1px solid #af9b7c;
     padding: 6rpx 36rpx;
     color: #af9b7c;
+		display: inline-block;
+		margin-bottom: 20rpx;
   }
 
   .Live-Band>.Singer-info>.collect>text.collectActive {
