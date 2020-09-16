@@ -8,7 +8,7 @@
 			</view>
 			<view class="album_info">
 				<text class="title">{{name}}</text>
-				<text class="author">{{bool?total_songs+'首单曲':chanteur}}</text>
+				<text class="author">{{total_songs?total_songs+'首单曲':chanteur}}</text>
 			</view>
 		</navigator>
 	</view>
