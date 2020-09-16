@@ -1,9 +1,9 @@
 <template>
 	<view class="tabbar">
-		<navigator v-for="(item,i) of tabBar" :key="i" class="tabbar-item" :url="item.url"  hover-class="none">
+		<view v-for="(item,i) of tabBar" :key="i" class="tabbar-item" @click="goTo($event,item.url)"  hover-class="none">
 			<image :src="act==item.text?item.selectedIcon:item.unSelectedIcon" mode="widthFix"></image>
 			<text :class="act==item.text?'active':''">{{item.text}}</text>
-		</navigator>
+		</view>
 	</view>
 </template>
 
@@ -29,7 +29,12 @@
 			}
 		},
 		methods:{
-			
+			goTo(e,url){
+				uni.navigateTo({
+					url,
+					animationType:"none"
+				})
+			}
 		},
 		mounted(){
 		}
@@ -48,7 +53,7 @@
 		z-index: 100;
 	}
 
-	view.tabbar>navigator.tabbar-item {
+	view.tabbar>view.tabbar-item {
 		padding: 10rpx 0;
 		text-align: center;
 		position: relative;
@@ -59,10 +64,10 @@
 		font-size: 26rpx;
 		color: #999;
 	}
-view.tabbar>navigator.tabbar-item >text.active{
+view.tabbar>view.tabbar-item >text.active{
 	color: #333;
 }
-	view.tabbar>navigator.tabbar-item>image {
+	view.tabbar>view.tabbar-item>image {
 		width: 55rpx;
 	}
 </style>
