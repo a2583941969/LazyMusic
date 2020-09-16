@@ -6,11 +6,11 @@
 				<image src="../../static/icon/homeselect.png"></image>
 			</view>
 			<!-- 音乐名字 -->
-			<view class="songName">Shakingnesses/Camarazak</view>
+			<text class="songName">{{songName}}/{{singer}}</text>
 			<!-- 音乐按钮 -->
 			<view class="albumPlay">
 				<!-- 阻止事件冒泡，点击对应按钮，开始不同的操作 -->
-				<image src="../../static/icon/play.png" mode="" @click.stop="playMusic"></image>
+				<image :src="this.$store.state.musicOn?'../../static/icon/pause.png':'../../static/icon/play.png'" mode="" @click.stop="playMusic"></image>
 				<image src="../../static/icon/skip-forward-filled.png" mode="" @click.stop="playNext"></image>
 			</view>
 		</view>
@@ -19,24 +19,25 @@
 
 <script>
 	export default {
-		//     专辑/音乐图片       专辑名字，作者名字，  歌曲长度
-		// props: ["AlbumImg", "AlbumName", "singer",songLength],
+		//     专辑/音乐图片     专辑名字，作者名字，  歌曲长度     歌曲名字
+		// props: ["AlbumImg", "AlbumName", "singer",songLength，songName],
 		data() {
 			return {
-					AlbumName:'Meshugass',
-					singer:'Camarzak',
-					songLength:1200
+				//这里有个坑，应该是将专辑名字处理过后，才渲染，如果字符串过长应该截取拼接省略号
+					AlbumName:'Story',
+					songName:'Love Story from me a',
+					singer:'Taylor Swift',
 			}
 		},
 		mounted() {
-	
+		 
 		},
 		methods: {
 			//点击底部音乐栏就去歌曲单页
 		toSong(){
 			uni.navigateTo({
-				url:`../../pages/song/song?AlbumName=${this.AlbumName}&singer=${this.singer}&songLength=${this.songLength}`
-			})
+				url:`../../pages/song/song?AlbumName=${this.AlbumName}&singer=${this.singer}&songName=${this.songName}`
+			});
 		},
 		playMusic(){
 			console.log("音乐开始播放")
@@ -66,7 +67,7 @@
 		position: absolute;
 		top: -30rpx;
 		left: 30rpx;
-		z-index: 1000;
+		z-index: 2;
 		border-radius: 50%;
 		background-color: orange;
 		
@@ -98,9 +99,11 @@
 	.songName {
 		color: black;
 		margin: 0rpx 20rpx 0rpx 180rpx;
-		font-size: 30rpx;
+		font-size: 25rpx;
 		padding-top: 20rpx;
 		position: absolute;
-
+		width: 55%;
+		height: 35rpx;
+		overflow: hidden;
 	}
 </style>

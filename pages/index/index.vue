@@ -21,6 +21,7 @@
 			
 		</view>
 		<my-tabbar active="首页"></my-tabbar>
+		<AlbumPlay></AlbumPlay>
 	</view>
 </template>
 
