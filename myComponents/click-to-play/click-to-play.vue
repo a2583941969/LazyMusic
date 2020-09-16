@@ -24,9 +24,9 @@
 		data() {
 			return {
 				//这里有个坑，应该是将专辑名字处理过后，才渲染，如果字符串过长应该截取拼接省略号
-					AlbumName:'Story',
-					songName:'Love Story from me a',
-					singer:'Taylor Swift',
+						AlbumName:'Story',
+						songName:'Love Story from me a',
+						singer:'Taylor Swift',
 			}
 		},
 		mounted() {

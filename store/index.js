@@ -6,7 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
 	musicOn:false,
-	audioEle:''
+	audioEle:'',
+	songLength:'',
+	currentTime:''
   },
   mutations: {
 		// 查看是否正在播放音乐
@@ -14,8 +16,16 @@ export default new Vuex.Store({
 			state.musicOn = musicOn
 		},
 		setAudioEle(state,audioEle){
-			state.audioEle=audioEle
+			state.audioEle=audioEle;
+			
+		},
+		setSongLen(state,songLength){
+			state.songLength = songLength
+		},
+		setCurrentTime(state,currentTime){
+			state.currentTime =currentTime
 		}
+		
   },
   actions: {
   },
