@@ -29,11 +29,31 @@
 		{
 			"path": "pages/songlist/songlist",
 			"style":{
-				"navigationBarBackgroundColor":"#FFFFFF",
-				"navigationBarTextStyle":"black",
-				"enablePullDownRefresh":false
+				"app-plus":{
+					"titleNView":{
+						"type":"transparent",
+						"backgroundColor":"#ffffff",
+						"titleColor":"#000",
+						"titleText":"歌单",
+						"autoBackButton":true
+					}
+				}
 			}
-		}	
+		},
+		{
+			"path":"pages/artist/artist",
+			"style":{
+				"app-plus":{
+					"titleNView":{
+						"type":"transparent",
+						"backgroundColor":"#ffffff",
+						"titleColor":"#000",
+						"titleText":"歌手",
+						"autoBackButton":true
+					}
+				}
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#FFFFFF00",

@@ -11,16 +11,13 @@
 			<text class="albumName">来自专辑：{{albumName}}</text>
 			<text class="singer">{{singer}}</text>
 		</view>
+	<!-- 	<view class="lyric">
+			<text>{{showLrc}}</text>
+		</view> -->
+
 		<view class="process">
-			<slider
-			backgroundColor="#D3D3D3"
-			activeColor="#DD524D" 
-			:value="this.store.state.currentTime"
-			min="0"
-			:max="this.store.state.songLength"
-			@change="sliderChange"
-			block-size="12"
-			></slider>
+			<slider backgroundColor="#D3D3D3" activeColor="#DD524D" :value="this.store.state.currentTime" min="0" :max="this.store.state.songLength"
+			 @change="sliderChange" block-size="12"></slider>
 		</view>
 		<!-- 底部播放框-->
 		<view class="playBox">
@@ -56,79 +53,135 @@
 	export default {
 		data() {
 			return {
+				id: 1463168014,
 				bgimage: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1599988611425&di=868b6430664d42152e80dd2a01c4866a&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201511%2F21%2F20151121140727_JuM5a.jpeg',
 				albumName: null,
 				singer: null,
 				songUrl: '',
 				isPlay: true,
-				audioEle:'',
-				currentTime: 0,
 				songName: '',
-				newVal:''
+				lyric: [],
+				showLrc: ''
 			}
 		},
 		onLoad(options) {
-	
 			// console.log(this.store.state.musicOn)
 			//将组建点击之后传过来的参数进行分配，   
-			let strLen = options.songName.length;
-			//如果长度 大于13，那么就只显示一部分
-			// strLen < 13 ? this.songName = options.songName : this.songName = options.songName.substring(0, 13) + '....';
-			this.songName= options.songName;
+			this.songName = options.songName;
 			this.singer = options.singer;
 			this.albumName = options.AlbumName;
 			//实例化 音频对象
 			getSong: {
 				uni.request({
-					url: 'http://localhost:3000/song/url?id=1457707546',
+					url: 'http://localhost:3000/song/url?id=' + this.id,
 				}).then(res => {
-					console.log(res[1].data.data[0].url)
-					
-					this.songUrl = res[1].data.data[0].url;
-					
-					// 如果状态管理器里面没有实例化的音乐
-					if (this.store.state.audioEle === '') {
-						//就实例化音乐
-						this.store.commit('setAudioEle',uni.createInnerAudioContext());
-						let {audioEle} = this.store.state;
-						if (!this.store.state.musicOn) { //如果当前没有音乐在播放的时候
-							audioEle.autoplay = true;
-							// console.log(this.songUrl)
-							audioEle.src = this.songUrl;
-							audioEle.loop = true;
-							//监听音乐进入播放的状态获取时长
-							audioEle.onCanplay(() => {
-							 //获取当前音乐的总时长
-						 this.store.commit('setSongLen',audioEle.duration)
-							})
-							audioEle.onTimeUpdate(() => {
-								//获取当前的播放时间，存到vuex中
-								// this.currentTime = audioEle.currentTime;
-								this.store.commit('setCurrentTime',audioEle.currentTime)
-							});
-							// 当音乐播放的时候
-							audioEle.onPlay(() => {
-								this.store.commit('setMusicOn', true);
-							});
-							// 当音乐暂停的时候
-							audioEle.onPause(() => {
-								this.store.commit('setMusicOn', false)
-							})
+					// console.log(res[1].data.data[0].url)
+					// 如果请求回来的url拿不到,那就弹出消息提示框
+					if (res[1].data.data[0].url) {
+						this.songUrl = res[1].data.data[0].url;
+						// 如果状态管理器里面没有实例化的音乐                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+						if (this.store.state.audioEle === '') {
+							//就实例化音乐
+							this.store.commit('setAudioEle', uni.createInnerAudioContext());
+							let {
+								audioEle
+							} = this.store.state;
+							if (!this.store.state.musicOn) { //如果当前没有音乐在播放的时候
+								audioEle.autoplay = true;
+								// console.log(this.songUrl)
+								audioEle.src = this.songUrl;
+								audioEle.loop = true;
+								//监听音乐进入播放的状态获取时长
+								audioEle.onCanplay(() => {
+									//获取当前音乐的总时长
+									this.store.commit('setSongLen', audioEle.duration)
+								})
+								audioEle.onTimeUpdate(() => {
+									//获取当前的播放时间，存到vuex中
+									// this.currentTime = audioEle.currentTime;
+
+									this.store.commit('setCurrentTime', audioEle.currentTime)
+								});
+								// 当音乐播放的时候
+								audioEle.onPlay(() => {
+									this.store.commit('setMusicOn', true);
+
+								});
+								// 当音乐暂停的时候
+								audioEle.onPause(() => {
+									this.store.commit('setMusicOn', false)
+								})
+							}
 						}
+					} else {
+						uni.showToast({
+							title: '暂无歌曲',
+							icon: 'loading'
+						})
 					}
-				})
+				}).then(
+					this.getLyric(this.id)
+
+				)
 			}
 		},
 		methods: {
-			
+			//获取歌词
+			async getLyric(id) {
+				let res = await this.$myReq({
+					url: 'lyric?id=' + id,
+					methods: 'GET'
+				});
+				// console.log(res.data.lrc)
+				// let {
+				// 	lyric
+				// } = res.data.lrc;
+				// let arrLyric = lyric.split('\n')
+				// // 正则表达式匹配歌词前缀
+				// let regExp = /\[(\d*(\:)*\d*\.\d*)\]/g;
+				// let time = [];
+				// arrLyric.forEach((item) => {
+				// 	let arr = item.split("]")
+				// 	//获取分钟数
+				// 	let mins = arr[0].substring(1).split(":")[0];
+				// 	//获取秒数
+				// 	let sec = arr[0].substring(1).split(":")[1];
+				// 	//转换成秒数
+				// 	let timer = (mins * 60) + (sec * 1);
+				// 	timer = Number(timer.toString().split(".")[0])
+
+				// 	let obj = {
+				// 		time: timer,
+				// 		geci: arr[1]
+				// 	}
+				// 	time.push(obj);
+				// })
+				// //从数组的末尾删除一个空的成员
+				// time.pop();
+				// console.log(time)
+				// //遍历这个time，如果time的时间节点与当前播放的事件节点重复，那么我就让对应的歌词显示在页面上
+				// let {
+				// 	audioEle
+				// } = this.store.state;
+
+
+				// let lyrics = lyric.replace(regExp, '');
+				// console.log(lyrics)
+				// // 正则匹配换行转义字符
+				// let reg = /\n/g;
+				// let arrLrc = lyrics.split(reg)
+				// this.lyric = arrLrc
+			},
 			sliderChange(e) {
 				// console.log(e.target.value)
 				// 获取拖住事件的值,然后尝试赋值给音乐的当前时长,改变进度条
-				let value =e.target.value;
+				let value = e.target.value;
 				//从vuex中取出这个音乐的实例化对象
-				let {audioEle} =this.store.state;
+				let {
+					audioEle
+				} = this.store.state;
 				//当用户改变进度条的value值的时候，就动态操作音乐的播放进度
-				audioEle.currentTime =value
+				audioEle.currentTime = value
 			},
 			//点击获取上一个歌曲
 			prevSong() {
@@ -150,23 +203,25 @@
 					audioEle.pause();
 				} else {
 					// 否则就让他播放
-					console.log(audioEle)
+
 					audioEle.play();
 				}
 				this.store.state.musicOn = !this.store.state.musicOn
 			}
 		},
-		onShow() {
-			console.log(this.currentTime);
-			//页面每次渲染完成
-			// 取出状态管理器的audio实例
-			let {audioEle} = this.store.state
-			//获取当前实例的播放位置，赋值给进度条的value
-			console.log(audioEle.currentTime)
-			this.newVal = audioEle.currentTime
+		// onShow() {
 
-		},
-		
+		// 	//页面每次渲染完成
+		// 	// 取出状态管理器的audio实例
+		// 	let {
+		// 		audioEle
+		// 	} = this.store.state
+		// 	//获取当前实例的播放位置，赋值给进度条的value
+
+		// 	this.newVal = audioEle.currentTime
+
+		// },
+
 	}
 </script>
 
@@ -182,14 +237,23 @@
 		margin-top: 50rpx;
 		width: 50rpx;
 		height: 50rpx;
-
 		font-size: 12rpx;
+	}
+
+	.lyric {
+		margin: 30rpx 90rpx;
+		font-size: 30rpx;
+		overflow: hidden;
+		height: 150rpx;
+		margin-bottom: 110rpx;
+
 	}
 
 	.playBox .more>view>image {
 		width: 100%;
 		height: 100%;
 	}
+
 
 	.playBox .more>view:nth-child(2) {
 		margin-left: 70rpx;
@@ -226,14 +290,16 @@
 	}
 
 	.songContent {
-		margin: 28% 90rpx;
+		margin-top: 28%;
+		margin-left: 90rpx;
+		margin-right: 90rpx;
 	}
 
 	.albumName-title {
 		font-size: 70rpx;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		white-space:nowrap
+		white-space: nowrap
 	}
 
 	.albumName,
