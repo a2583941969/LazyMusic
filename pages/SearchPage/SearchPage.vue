@@ -141,6 +141,7 @@
               item.picUrl = item.picUrl + '?imageView=1&type=webp&thumbnail=246x0'// 将图片路径拼接上移动端使用的路径
               this.info.push(item)
             })
+            console.log(res)
           })
       },
     },
@@ -158,6 +159,7 @@
     onReachBottom() {
       this.page++;
       this.getinfo()
+      console.log('到底啦')
     }
   }
 </script>
@@ -166,8 +168,12 @@
   .search-page {
     position: relative;
   }
+  .search-page>.first{
+    background-color: #FFFFFF;
+  }
 
   .search-page>.first>.search-head {
+    width: 100%;
     padding: 0 30rpx;
     display: flex;
     align-items: center;
