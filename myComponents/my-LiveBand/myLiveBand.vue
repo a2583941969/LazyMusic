@@ -55,7 +55,10 @@
 </script>
 
 <style>
-
+  .Live-Band {
+    margin-bottom: 100rpx;
+		margin-right: 20rpx;
+  }
 
   .Live-Band>.Singer-info {
     width: 196rpx;
@@ -67,6 +70,14 @@
     height: 196rpx;
     border-radius: 50%;
     overflow: hidden;
+  }
+
+
+  .Live-Band>.Singer-info>navigator>.Singer-avatar>image {
+    width: 125%;	
+    height: 125%;
+		display: block;
+		margin-left:-25rpx ;
   }
 
 
