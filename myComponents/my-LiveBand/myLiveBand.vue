@@ -57,6 +57,7 @@
 <style>
   .Live-Band {
     margin-bottom: 100rpx;
+    margin-right: 20rpx;
   }
 
   .Live-Band>.Singer-info {
@@ -72,8 +73,8 @@
   }
 
   .Live-Band>.Singer-info>navigator>.Singer-avatar>image {
-    width: 100%;
-    height: 100%;
+    width: 125%;
+    height: 125%;
   }
 
   .Live-Band>.Singer-info>navigator>.Leigh-Nash {
