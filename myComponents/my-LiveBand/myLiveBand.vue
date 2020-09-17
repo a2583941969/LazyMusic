@@ -55,10 +55,7 @@
 </script>
 
 <style>
-  .Live-Band {
-    margin-bottom: 100rpx;
-    margin-right: 20rpx;
-  }
+
 
   .Live-Band>.Singer-info {
     width: 196rpx;
@@ -72,12 +69,6 @@
     overflow: hidden;
   }
 
-  .Live-Band>.Singer-info>navigator>.Singer-avatar>image {
-    width: 125%;
-    height: 125%;
-    display: block;
-    margin-left: -25rpx;
-  }
 
   .Live-Band>.Singer-info>navigator>.Leigh-Nash {
     width: 196rpx;
