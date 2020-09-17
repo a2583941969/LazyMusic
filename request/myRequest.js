@@ -2,7 +2,6 @@
 const baseUrl = 'http://localhost:3000/';
 //封装一个请求的函数
 export const myRequest = (options) => {
-	options.method = options.method.toUpperCase()
 	return new Promise((resolve, reject) => {
 		let obj = {
 			//访问路径
