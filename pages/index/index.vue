@@ -111,7 +111,7 @@
 			// 跳转搜索页面的事件
 			goSerch() {
 				uni.navigateTo({
-					url: "/pages/mine/mine",
+					url: "/pages/SearchPage/SearchPage",
 					animationType: "zoom-fade-out"
 				})
 			}

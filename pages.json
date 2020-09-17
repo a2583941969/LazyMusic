@@ -53,7 +53,16 @@
 					}
 				}
 			}
-		}
+		},
+    {
+      "path":"pages/SearchPage/SearchPage",
+      "style":{
+        "app-plus":{
+          "titleNView":false
+        },
+        "onReachBottomDistance":10
+      }
+    }
     ],
 	"globalStyle": {
 		"navigationBarBackgroundColor": "#FFFFFF00",
