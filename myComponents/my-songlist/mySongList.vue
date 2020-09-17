@@ -62,11 +62,12 @@
 <style>
 	view.songlist {
 		width: 700rpx;
-		margin-right: 20rpx;
+		margin: 0 0 20rpx 20rpx;
 		padding-right: 30rpx;
 		box-sizing: border-box;
 		display: flex;
 		justify-content: space-between;
+		background-color: #eaeaea;
 	}
 
 	view.songlist>view.songlist-leftimg {

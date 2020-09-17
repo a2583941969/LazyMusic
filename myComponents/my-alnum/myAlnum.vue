@@ -25,20 +25,20 @@
 		props: ["name", "page_img", "chanteur", "total_songs", "id"],
 		data() {
 			return {
-				
+
 			};
 		},
-		methods:{
+		methods: {
 			// 点击播放本歌单的函数
-			playThisAlnum(){
+			playThisAlnum() {
 				// 发送获取当前歌单歌曲的请求
 				// 发送获取当前歌单第一首歌url的请求
 				console.log(132132)
 			},
-			goto(){
+			goto() {
 				uni.navigateTo({
-					url:"/pages/mine/mine",
-					animationType:"none"
+					url: "/pages/mine/mine",
+					animationType: "none"
 				})
 			}
 		}
@@ -51,23 +51,29 @@
 		margin-right: 20rpx;
 	}
 
+	view.album>view>view {
+		width: 100%;
+	}
+
 	view.album>view image {
 		width: 100%;
 	}
-view.album view{
-	position: relative;
-}
-view.album>view>view>view.btn{
-	position: absolute;
-	bottom: 20rpx;
-	right: 20rpx;
-	width: 70rpx;
-	height: 70rpx;
-	border-radius: 50%;
-	background: url('../../static/icon/play-filled.png') center center no-repeat;
-	background-size: cover;
-	z-index: 20;
-}
+
+	view.album view {
+		position: relative;
+	}
+
+	view.album>view>view>view.btn {
+		position: absolute;
+		bottom: 20rpx;
+		right: 20rpx;
+		width: 70rpx;
+		height: 70rpx;
+		border-radius: 50%;
+		background: url('../../static/icon/play-filled.png') center center no-repeat;
+		background-size: cover;
+		z-index: 20;
+	}
 
 	view.album>view>view.album_info {
 		display: flex;
@@ -78,10 +84,11 @@ view.album>view>view>view.btn{
 	view.album>view>view.album_info>text.title {
 		font-size: 28rpx;
 		font-weight: 900;
-		text-overflow:ellipsis; 
+		text-overflow: ellipsis;
 		overflow: hidden;
 		white-space: nowrap;
 	}
+
 	view.album>view>view.album_info>text.author {
 		font-size: 24rpx;
 		color: #666;
