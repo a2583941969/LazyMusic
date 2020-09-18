@@ -36,8 +36,10 @@
 				console.log(132132)
 			},
 			goto() {
+				console.log(this.id)
+				let bool=false
 				uni.navigateTo({
-					url: "/pages/mine/mine",
+					url: "/pages/songlist/songlist?id="+this.id+"&status="+bool,
 					animationType: "none"
 				})
 			}
