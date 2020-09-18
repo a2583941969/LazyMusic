@@ -1,52 +1,74 @@
 <template>
-	<view class="song">
-		<image :src="bgimage" mode="" class="bg-set"></image>
-		<!-- 歌曲页面状态栏,点击之后返回上一页 -->
-		<view class="songStatusBar" @click="navigatorBack">
-			<image src="../../static/icon/arrow-down.png" mode=""></image>
-		</view>
-		<!-- 歌曲页背景文字区域 -->
-		<view class="songContent">
-			<text class="albumName-title">{{songName}}</text>
-			<text class="albumName">来自专辑：{{albumName}}</text>
-			<text class="singer">{{singer}}</text>
-		</view>
-	<!-- 	<view class="lyric">
-			<text>{{showLrc}}</text>
-		</view> -->
-
-		<view class="process">
-			<slider backgroundColor="#D3D3D3" activeColor="#DD524D" :value="this.store.state.currentTime" min="0" :max="this.store.state.songLength"
-			 @change="sliderChange" block-size="12"></slider>
-		</view>
-		<!-- 底部播放框-->
-		<view class="playBox">
-			<input type="range" value="" class="process" />
-			<view class="playControl">
-				<image src="../../static/icon/loop.png" mode="widthFix"></image>
-				<image src="../../static/icon/prev.png" mode="widthFix" @click="prevSong"></image>
-				<image :src="this.$store.state.musicOn?'../../static/icon/pause-outline-filled.png':'../../static/icon/play-filled.png'"
-				 mode="widthFix" @click="startPlay"></image>
-				<image src="../../static/icon/next.png" mode="widthFix" @click="nextSong"></image>
-				<image src="../../static/icon/time.png" mode="widthFix"></image>
+	
+	<swiper duration="1000" style="height: 100vh;">
+		<swiper-item>
+			<view class="playPage">
+				<view class="song">
+					<image :src="bgimage" mode="" class="bg-set"></image>
+					<!-- 歌曲页面状态栏,点击之后返回上一页 -->
+					<view class="songStatusBar" @click="navigatorBack">
+						<image src="../../static/icon/arrow-down.png" mode=""></image>
+					</view>
+					<!-- 歌曲页背景文字区域 -->
+					<view class="songContent">
+						<text class="albumName-title">{{songName}}</text>
+						<text class="albumName">来自专辑：{{albumName}}</text>
+						<text class="singer">{{singer}}</text>
+					</view>
+					<view class="lyric">
+						<text>你快听，是我在，是我在，是我在，哼你最爱的听旋律</text>
+						<text>你快听，滴答滴，滴答滴，窗外又在下雨</text>
+						<text>难道这，不是你最爱的天气</text>
+					</view>
+					<view class="process">
+						<slider backgroundColor="#7f8fa6" activeColor="#fad390" :value="this.store.state.currentTime" min="0" :max="this.store.state.songLength"
+						 @change="sliderChange" block-size="12"></slider>
+					</view>
+					<!-- 底部播放框-->
+					<view class="playBox">
+						<view class="playControl">
+							<image src="../../static/icon/loop.png" mode="widthFix"></image>
+							<image src="../../static/icon/prev.png" mode="widthFix" @click="prevSong"></image>
+							<image :src="this.$store.state.musicOn?'../../static/icon/pause-outline-filled.png':'../../static/icon/play-filled.png'"
+							 mode="widthFix" @click="startPlay"></image>
+							<image src="../../static/icon/next.png" mode="widthFix" @click="nextSong"></image>
+							<image src="../../static/icon/time.png" mode="widthFix"></image>
+						</view>
+						<view class="more">
+							<view class="downLoad">
+								<image src="../../static/icon/download.png" mode=""></image>
+								<text>下载</text>
+							</view>
+							<view class="collect">
+								<image src="../../static/icon/collection.png" mode=""></image>
+								<text>收藏</text>
+							</view>
+							<view class="share">
+								<image src="../../static/icon/partager.png" mode=""></image>
+								<text>分享</text>
+							</view>
+						</view>
+					</view>
+				</view>
 			</view>
-			<view class="more">
-				<view class="downLoad">
-					<image src="../../static/icon/download.png" mode=""></image>
-					<text>下载</text>
+		</swiper-item>
+	<!-- 	这里是歌词列表页 -->
+		<swiper-item>
+			<view class="playList">
+				<!-- <image src="../../static/122.jpg" mode="" class="bg-set"></image> -->
+				<view class="songStatusBar" @click="navigatorBack">
+					<image src="../../static/icon/arrow-down.png" mode=""></image>
 				</view>
-				<view class="collect">
-					<image src="../../static/icon/collection.png" mode=""></image>
-					<text>收藏</text>
+				<view class="listName">
+					<text>播放列表</text>
+					<text>1首</text>
 				</view>
-				<view class="share">
-					<image src="../../static/icon/partager.png" mode=""></image>
-					<text>分享</text>
-				</view>
-
 			</view>
-		</view>
-	</view>
+			
+		</swiper-item>
+	</swiper>
+	
+	
 </template>
 
 <script>
@@ -226,118 +248,35 @@
 </script>
 
 <style>
-	.playBox .more {
-		width: 750rpx;
-		display: flex;
-		flex-wrap: nowrap;
-		justify-content: center;
-	}
-
-	.playBox .more>view {
-		margin-top: 50rpx;
-		width: 50rpx;
-		height: 50rpx;
-		font-size: 12rpx;
-	}
-
-	.lyric {
-		margin: 30rpx 90rpx;
-		font-size: 30rpx;
-		overflow: hidden;
-		height: 150rpx;
-		margin-bottom: 110rpx;
-
-	}
-
-	.playBox .more>view>image {
-		width: 100%;
-		height: 100%;
-	}
-
-
-	.playBox .more>view:nth-child(2) {
-		margin-left: 70rpx;
-		margin-right: 70rpx;
-	}
-
-	.playControl {
-		margin-top: 45rpx;
-		display: flex;
-		flex-wrap: nowrap;
-		justify-content: space-around;
-	}
-
-	.playControl>image {
-		width: 50rpx;
-		height: 50rpx;
-	}
-
-	.playControl>image:nth-child(3) {
-		width: 150rpx;
-		height: 150rpx;
-	}
-
-	.playControl>image:not(:nth-child(3)) {
-		margin-top: 60rpx;
-	}
-
-	.playBox {
-		width: 750rpx;
-		height: 40%;
-		position: absolute;
-		bottom: 0;
-		background-color: transparent;
-	}
-
-	.songContent {
-		margin-top: 28%;
-		margin-left: 90rpx;
-		margin-right: 90rpx;
-	}
-
-	.albumName-title {
-		font-size: 70rpx;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap
-	}
-
-	.albumName,
-	.singer {
-		font-size: 25rpx;
-	}
-
-	.songContent>text {
-		display: block;
-		padding-bottom: 15rpx;
-	}
-
-	page {
-		color: #FFFFFF;
-	}
-
-	.song {
-		box-sizing: border-box;
-		padding-top: 90rpx;
-	}
-
-	.songStatusBar {
-		width: 60rpx;
-		height: 60rpx;
-		margin-left: 90rpx;
-	}
-
-	.songStatusBar>image {
-		width: 100%;
-		height: 100%;
-	}
-
-	.bg-set {
-		position: fixed;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		z-index: -1;
-	}
+page {color: #FFFFFF;}
+/* 歌曲播放页面的样式 */
+.playPage{height: 100vh;}
+.playPage>.song{width: 100%;height: 80vh;}
+.playPage>.song::before{content:'';display: block;width: 100%;height:70%;bottom: 0; position: absolute;z-index: -1;background: linear-gradient(top,#FFFFFF00,#1d283d,#1d283d,#1d283d,#1d283d,#172238);}
+.playPage>.song::after{content:'';display: block;width: 100%;height:100%;position: absolute;top:0;z-index: -2;background: linear-gradient(bottom,#172238,#FFFFFF00);}
+.process{margin-top: 130rpx;}
+.playPage .playBox .more {width: 750rpx;display: flex;flex-wrap: nowrap;justify-content: center;}
+.playPage .playBox .more>view {margin-top: 50rpx;width: 50rpx;height: 50rpx;font-size: 12rpx;}
+.playPage .lyric {margin: 30rpx 90rpx;font-size: 30rpx;overflow: hidden;height: 150rpx;margin-bottom: 110rpx;text-align: center;}
+.playPage .playBox .more>view>image {width: 100%;height: 100%;}
+.playPage .playBox .more>view:nth-child(2) {margin-left: 70rpx;margin-right: 70rpx;}
+.playPage .playControl {margin-top: 200rpx;display: flex;flex-wrap: nowrap;justify-content: space-around;}
+.playPage .playControl>image {width: 50rpx;height: 50rpx;}.playPage .playControl>image:nth-child(3) {width: 150rpx;height: 150rpx;}
+.playPage .playControl>image:not(:nth-child(3)) {margin-top: 60rpx;}
+.playPage .playBox {width: 750rpx;height: 40%;position: absolute;bottom: 0;background-color: transparent;}
+.playPage .songContent {margin-top: 28%;margin-left: 90rpx;margin-right: 90rpx;}
+.playPage .albumName-title {font-size: 70rpx;overflow: hidden;text-overflow: ellipsis;white-space: nowrap}
+.playPage .albumName,.playPage .singer {font-size: 25rpx;}
+.songContent>text {display: block;padding-bottom: 15rpx;}
+/* 歌曲列表展示出来的样式 */
+.playList{background-color: red; width: 100%; height: 100vh;}
+.playList::before{content: '';display: block;width: 100%;height: 100vh;position: absolute;}
+.playPage .song {box-sizing: border-box;padding-top: 90rpx;}
+.songStatusBar {width: 60rpx;height: 60rpx;margin-left: 90rpx;}
+.songStatusBar>image {width: 100%;height: 100%;}
+.playList .songStatusBar {padding-top: 100rpx;}
+.playPage .bg-set,.playList .bg-set {position: fixed;width: 100%;height: 100%;top: 0;left: 0;z-index: -3;}
+.playList>.listName{display: block; margin: 50rpx 90rpx;}
+.playList>.listName>text:first-child{color: #999999;}
+.playList>.listName>text:nth-child(2){font-size: 30rpx; margin: 0 20rpx;}
 </style>
