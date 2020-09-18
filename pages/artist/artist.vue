@@ -48,7 +48,7 @@
 								</view>
 							</view>
 						</view>
-						<view class="songbox" >
+						<view class="songbox">
 							<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of artistInfo.hotSongs" :key="k" :sid="i.id" :sname="i.name"
 							 :alnumName="i.al.name" :singer="i.ar[0].name" :sing_img="i.al.picUrl" :isAlnum="false">
 							</my-songlist>
@@ -56,9 +56,9 @@
 						</view>
 					</view>
 					<!-- 专辑选项卡 -->
-					<view v-else="this.active==1" class="albumbox" >
-						<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of albumItems" :key="k" :sid="i.id" :sname="i.name" 
-						 :alnumName="i.publictime" :singer="i.name" :sing_img="i.picUrl" :isAlnum="false" @click.native="toAblumlist(i.id,true)">
+					<view v-else="this.active==1" class="albumbox">
+						<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of albumItems" :key="k" :sid="i.id" :sname="i.name"
+						 :alnumName="i.publictime" :singer="i.name" :sing_img="i.picUrl" :isAlnum="false" @click.native="toAblumlist(i.id)">
 							<slot>
 								<view class="songsize">
 									{{i.size}}首歌曲
@@ -75,7 +75,6 @@
 
 <script>
 	import mySonglist from "../../myComponents/my-songlist/mySongList.vue"
-
 	export default {
 		components: {
 			mySonglist
@@ -90,6 +89,11 @@
 				items: ['热门歌曲', '全部专辑']
 			}
 		},
+		onLoad: function(option) {
+			let id = option.id * 1;
+			this.getAlbum(id);
+			this.getArtist(id)
+		},
 		methods: {
 			//选项卡切换
 			NavClick(e) {
@@ -99,18 +103,20 @@
 				this.active = index;
 			},
 			//前往专辑歌单列表
-			toAblumlist(id,status){
-				console.log(id);
-				console.log(status);
-				// let id=id;
-				// let status=status;
-				
-				this.$router.push({path:'/pages/songlist/songlist',params:{id:id,status:status}})
+			toAblumlist(id) {
+				let sid = id;
+				let bool = false;
+				// this.$router.push({path:'/pages/songlist/songlist',params:{id:id,status:status}})
+				uni.navigateTo({
+					url: "/pages/songlist/songlist?id=" + sid + '&status=' + bool,
+					animationType: "none"
+				})
 			},
 			//获取专辑
-			async getAlbum() {
+			async getAlbum(id) {
+				let url='artist/album?id='+id+'&limit=30'
 				let res = await this.$myReq({
-					url: 'artist/album?id=7219&limit=30',
+					url: url,
 					method: 'GET'
 				});
 				// console.log(res.data);
@@ -134,13 +140,14 @@
 				this.albumItems = datas;
 			},
 			//获取热门歌曲
-			async getArtist() {
+			async getArtist(id) {
+				let url='artists?id='+id;
 				let res = await this.$myReq({
 					// url:"song/url?id=1407551413",
 					// url:"top/playlist/highquality?before=1503639064232&limit=6",
 					// url: "playlist/detail?id=819618896", 
 					//819618896 3025491905  	3025491896 3025496710
-					url: 'artists?id=7219',
+					url: url,
 					method: 'GET'
 				});
 				// this.artistSong = res.data.playlist;
@@ -156,18 +163,8 @@
 				this.img = res.data.artist.img1v1Url;
 				//动态修改导航栏标题
 				uni.setNavigationBarTitle({
-					title:this.artistInfo.artist.name
+					title: this.artistInfo.artist.name
 				})
-			},
-			//测试获取歌单
-			async getgedan() {
-				let res = await this.$myReq({
-					url: 'top/playlist/highquality?before=1503639064232&limit=10',
-					method: 'GET'
-				});
-				for (let i of res.data.playlists) {
-					// console.log(i.id)
-				}
 			},
 			//收藏
 			collect() {
@@ -186,17 +183,11 @@
 				console.log('播放全部')
 			}
 		},
-		created() {
-			this.getArtist(),
-			this.getAlbum(),
-			this.getgedan()
-		},
-
 	}
 </script>
 
 <style>
-	.albumbox{
+	.albumbox {
 		margin-bottom: 40rpx;
 		padding-bottom: 40rpx;
 	}
