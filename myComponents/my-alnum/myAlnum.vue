@@ -33,7 +33,8 @@
 			playThisAlnum() {
 				// 判断是专辑还是歌单
 				// ture为歌单  false为专辑
-				let isAlnum=this.total_songs?true:false;
+				let isAlnum=this.total_songs?false:true;
+				
 				this.$emit("sendAlnumId",{id:this.id,isAlnum})
 			},
 			goto() {
