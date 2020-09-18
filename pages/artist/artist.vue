@@ -48,7 +48,7 @@
 								</view>
 							</view>
 						</view>
-						<view class="songbox" v-if="artistInfo!=''">
+						<view class="songbox" >
 							<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of artistInfo.hotSongs" :key="k" :sid="i.id" :sname="i.name"
 							 :alnumName="i.al.name" :singer="i.ar[0].name" :sing_img="i.al.picUrl" :isAlnum="false">
 							</my-songlist>
@@ -56,9 +56,9 @@
 						</view>
 					</view>
 					<!-- 专辑选项卡 -->
-					<view v-else="this.active==1" class="albumbox">
-						<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of albumItems" :key="k" :sid="i.id" :sname="i.name"
-						 :alnumName="i.publictime" :singer="i.name" :sing_img="i.picUrl" :isAlnum="false">
+					<view v-else="this.active==1" class="albumbox" >
+						<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of albumItems" :key="k" :sid="i.id" :sname="i.name" 
+						 :alnumName="i.publictime" :singer="i.name" :sing_img="i.picUrl" :isAlnum="false" @click.native="toAblumlist(i.id,true)">
 							<slot>
 								<view class="songsize">
 									{{i.size}}首歌曲
@@ -83,8 +83,8 @@
 		data() {
 			return {
 				active: 0,
-				artistInfo: '',
-				albumItems: '',
+				artistInfo: null,
+				albumItems: null,
 				// img: 'http://p1.music.126.net/gA6MMdcY7WRNm0bs3W4E7w==/18651015743968707.jpg',
 				img: '',
 				items: ['热门歌曲', '全部专辑']
@@ -97,6 +97,15 @@
 					index
 				} = e.currentTarget.dataset;
 				this.active = index;
+			},
+			//前往专辑歌单列表
+			toAblumlist(id,status){
+				console.log(id);
+				console.log(status);
+				// let id=id;
+				// let status=status;
+				
+				this.$router.push({path:'/pages/songlist/songlist',params:{id:id,status:status}})
 			},
 			//获取专辑
 			async getAlbum() {
@@ -123,7 +132,6 @@
 					i.publictime = time;
 				}
 				this.albumItems = datas;
-
 			},
 			//获取热门歌曲
 			async getArtist() {
@@ -146,6 +154,10 @@
 				// this.artistSong=res.data.hotSongs;
 				this.artistInfo = res.data;
 				this.img = res.data.artist.img1v1Url;
+				//动态修改导航栏标题
+				uni.setNavigationBarTitle({
+					title:this.artistInfo.artist.name
+				})
 			},
 			//测试获取歌单
 			async getgedan() {
@@ -154,7 +166,7 @@
 					method: 'GET'
 				});
 				for (let i of res.data.playlists) {
-					console.log(i.id)
+					// console.log(i.id)
 				}
 			},
 			//收藏
@@ -176,8 +188,8 @@
 		},
 		created() {
 			this.getArtist(),
-				this.getAlbum(),
-				this.getgedan()
+			this.getAlbum(),
+			this.getgedan()
 		},
 
 	}

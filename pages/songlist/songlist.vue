@@ -10,8 +10,8 @@
 			<view class="mianinfo">
 				<!-- 专辑/歌手标题 -->
 				<view class="ablumtitle">
-					<text>{{songlist.name}}</text><br>
-					<text>{{songlist.trackCount}}首单曲</text>
+					<text>{{songlist.name||ablumtitle.name}}</text><br>
+					<text>{{songlist.trackCount||ablumtitle.size}}首单曲</text>
 				</view>
 				<!-- 专辑/歌手标题结束 -->
 				<!-- 操作按钮 -->
@@ -34,7 +34,7 @@
 				<!-- 操作按钮结束 -->
 				<!-- 歌曲列表 -->
 				<view class="songbox">
-					<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of songlist.tracks" :key="k" :sid="i.id" :sname="i.name"
+					<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of songlist.tracks||ablumlist" :key="k" :sid="i.id" :sname="i.name"
 					 :alnumName="i.al.name" :singer="i.ar[0].name" :sing_img="i.al.picUrl" :isAlnum="false">
 					</my-songlist>
 					<!-- 歌曲列表项 -->
@@ -55,23 +55,78 @@
 		data() {
 			return {
 				songlist: '',
-				img: 'http://p1.music.126.net/gA6MMdcY7WRNm0bs3W4E7w==/18651015743968707.jpg'
+				ablumlist:'',
+				ablumtitle:'',
+				// img: 'http://p1.music.126.net/gA6MMdcY7WRNm0bs3W4E7w==/18651015743968707.jpg'
+				img:''
 			}
 		},
 		methods: {
+			async getaaaa(){
+				if(this.$route.params.status){
+					//歌单接口
+					let res=await this.$myReq({
+						url:"playlist/detail?id=819618896",
+						method:'GET'
+					});
+					this.songlist=res.data.playlist;
+					this.img=res.data.playlist.coverImgUrl;
+					//动态修改导航栏标题
+					uni.setNavigationBarTitle({
+						title:this.songlist.name
+					})
+				}else{
+					//专辑接口
+					let url='album?id='+this.$route.params.id;
+					let res=await this.$myReq({
+						url:url,
+						method:'GET'
+					});
+					this.img=res.data.album.picUrl;
+					this.ablumtitle=res.data.album;
+					this.ablumlist=res.data.songs;
+					//动态修改导航栏标题
+					uni.setNavigationBarTitle({
+						title:this.ablumtitle.name
+					})
+					// console.log(this.ablumtitle);
+					// console.log(this.ablumlist);
+				}
+			},
 			async getsong() {
-
+				// if(this.$route.params.status){
+				// 	let res=await this.$myReq({
+				// 		url:"playlist/detail?id=819618896",
+				// 		method:'GET'
+				// 	});
+				// 	this.songlist=res.data.playlist;
+				// }else{
+				// 	let url='album?id='+this.$route.params.id;
+				// 	let res=await this.$myReq({
+				// 		url:url,
+				// 		method:'GET'
+				// 	});
+				// 	this.songlist=res.data;
+				// 	console.log(res.data)
+				// }
 				let res = await this.$myReq({
-					// url:"song/url?id=1407551413",
-					// url:"top/playlist/highquality?before=1503639064232&limit=6",
-					url: "playlist/detail?id=819618896", //819618896 3025491905  	3025491896 3025496710
-					//http://localhost:3000/album?id=74986004 歌手专辑入口
-					//playlist/detail?id=819618896   歌单入口156659312
-					method: 'GET'
-				});
+					url: "playlist/detail?id=819618896", 
+					method: 'GET',
+				});	
+				// 	// url:"song/url?id=1407551413",
+				// 	// url:"top/playlist/highquality?before=1503639064232&limit=6",
+					// url: "playlist/detail?id=819618896", //819618896 3025491905  	3025491896 3025496710
+				// 	//http://localhost:3000/album?id=74986004 歌手专辑入口
+				// 	//playlist/detail?id=819618896   歌单入口156659312
+					// method: 'GET'
+				
 				this.songlist = res.data.playlist;
-				console.log(res.data);
-				console.log(res.data.playlist);
+				// 				let id=this.$route.params.id;
+				// let status=this.$route.params.status;
+				// console.log(id,status);
+				// console.log(res.data);
+				// console.log(res.data.playlist);
+
 				// console.log(res.data.playlist.name); //歌单名
 				// console.log(res.data.playlist.coverImgUrl); //歌单封面
 				// console.log(res.data.playlist.trackCount); //歌曲数量
@@ -100,7 +155,8 @@
 			}
 		},
 		created() {
-			this.getsong()
+			// this.getsong()
+			this.getaaaa()
 		},
 
 	}
@@ -180,7 +236,6 @@
 		background-color: #fff;
 		display: flex;
 		flex-flow: column nowrap;
-
 		align-items: center;
 		border-top-left-radius: 30rpx;
 		border-top-right-radius: 30rpx;
