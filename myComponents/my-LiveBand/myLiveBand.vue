@@ -3,10 +3,10 @@
   <view class="Live-Band">
     <view class="Singer-info">
       <!-- 歌手信息 -->
-      <navigator url="">
+      <navigator url="/pages/SingerDetails/SingerDetails" open-type="navigate">
         <!-- 歌手头像 -->
         <view class="Singer-avatar">
-          <image :src="SingerAvatar"></image>
+          <image :src="SingerAvatar" mode="widthFix"></image>
         </view>
         <!-- 歌手名字 -->
         <view class="Leigh-Nash">{{LeighNash}}</view>
@@ -15,7 +15,7 @@
       </navigator>
       <!-- 收藏按钮 -->
       <view class="collect">
-        <text :class="{collectActive:collect}">{{collect?"已":""}}收藏</text>
+        <text @click="handleCollect" :class="{collectActive:collect}">{{collect?"已收藏":"收藏"}}</text>
       </view>
     </view>
   </view>
@@ -33,14 +33,36 @@
         // collect代表当前歌手是否被收藏,true代表已收藏,false代表未收藏
         collect: false
       }
-    }
+    },
+    methods: {
+      handleCollect() {
+        if (this.collect == true) {
+          this.collect = false;
+          uni.showToast({
+            title: "取消收藏成功",
+            mask: true
+          })
+        } else {
+          this.collect = true;
+          uni.showToast({
+            title: "收藏成功",
+            mask: true
+          })
+        }
+      },
+    },
   }
 </script>
 
 <style>
+  .Live-Band {
+    margin-bottom: 100rpx;
+    margin-right: 20rpx;
+  }
+
   .Live-Band>.Singer-info {
     width: 196rpx;
-		margin-right: 25rpx;
+    height: 314rpx;
   }
 
   .Live-Band>.Singer-info>navigator>.Singer-avatar {
@@ -51,8 +73,10 @@
   }
 
   .Live-Band>.Singer-info>navigator>.Singer-avatar>image {
-    width: 100%;
-    height: 100%;	
+    width: 125%;
+    height: 125%;
+    display: block;
+    margin-left: -25rpx;
   }
 
   .Live-Band>.Singer-info>navigator>.Leigh-Nash {
@@ -84,8 +108,6 @@
     border: 1px solid #af9b7c;
     padding: 6rpx 36rpx;
     color: #af9b7c;
-		display: inline-block;
-		margin-bottom: 20rpx;
   }
 
   .Live-Band>.Singer-info>.collect>text.collectActive {

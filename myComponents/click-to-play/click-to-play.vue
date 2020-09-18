@@ -24,9 +24,9 @@
 		data() {
 			return {
 				//这里有个坑，应该是将专辑名字处理过后，才渲染，如果字符串过长应该截取拼接省略号
-						AlbumName:'Story',
-						songName:'Love Story from me a',
-						singer:'Taylor Swift',
+						AlbumName:'不爱我',
+						songName:'不爱我',
+						singer:'薛之谦',
 			}
 		},
 		mounted() {
@@ -40,7 +40,14 @@
 			});
 		},
 		playMusic(){
-			console.log("音乐开始播放")
+			let {audioEle} =this.store.state;
+			if (this.store.state.musicOn) {
+				audioEle.pause();
+			} else {
+				// 否则就让他播放
+					
+				audioEle.play();
+			}
 		},
 		playNext(){
 			console.log("播放下一首音乐")

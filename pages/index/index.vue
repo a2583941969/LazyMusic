@@ -58,6 +58,42 @@
 				</view>
 			</scroll-view>
 		</view>
+		<!-- 推荐歌曲 -->
+		<view class="recommends sort">
+			<view class="sort-title">
+				<text>新歌推荐</text>
+				<text>更多</text>
+			</view>
+			<scroll-view scroll-x="true">
+				<view class="song">
+					<view v-for="(arritem,i) of newestSong" :key="i">
+						<block v-for="(item,key) of arritem" :key="key">
+							<my-songlist :sid="item.id" :sname="item.name" :alnumName="item.alnumName" :sing_img="item.picUrl">
+								<view class="songlist_play">
+									<image src="../../static/icon/play.png" mode="widthFix"></image>
+								</view>
+							</my-songlist>
+						</block>
+					</view>
+				</view>
+			</scroll-view>
+		</view>
+		<!-- 分类显示 -->
+		<block v-for="(classify,i) of sortSong" :key="i">
+			<view class="recommends sort">
+				<view class="sort-title">
+					<text>{{classify.cat}}</text>
+					<text>更多</text>
+				</view>
+				<scroll-view scroll-x="true">
+					<view class="recommends-list">
+						<block v-for="(item,key) of classify.playlists" :key="key">
+							<my-alnum :name="item.name" :id="item.id" :page_img="item.coverImgUrl" :total_songs="item.trackCount"></my-alnum>
+						</block>
+					</view>
+				</scroll-view>
+			</view>
+		</block>
 		<AlbumPlay class="index-albumplay"></AlbumPlay>
 		<my-tabbar active="首页"></my-tabbar>
 	</view>
@@ -92,7 +128,11 @@
 				// 推荐歌单
 				playlist: [],
 				// 推荐歌手
-				singers: []
+				singers: [],
+				// 最新歌曲
+				newestSong: [],
+				// 分类歌单
+				sortSong: []
 			}
 		},
 		methods: {
@@ -108,10 +148,32 @@
 					data,
 				})
 			},
+			promise() {
+				return new Promise((resolve) => {
+					uni.request({
+						url: "http://localhost:3000/playlist/catlist",
+						method: "get",
+						success: (res) => {
+							let sub = [];
+							let length = res.data.sub.length;
+							for (let i = 0;; i++) {
+								if (sub.length === 3) {
+									break;
+								}
+								let index = Math.floor(Math.random() * length);
+								if (sub.indexOf(res.data.sub[index] == -1)) {
+									sub.push(res.data.sub[index])
+								}
+							}
+							resolve(sub)
+						}
+					})
+				})
+			},
 			// 跳转搜索页面的事件
 			goSerch() {
 				uni.navigateTo({
-					url: "/pages/mine/mine",
+					url: "/pages/SearchPage/SearchPage",
 					animationType: "zoom-fade-out"
 				})
 			}
@@ -169,17 +231,93 @@
 				}
 			}).then(res => {
 				console.log(res)
-				res.data.artists.forEach(({id,name,picUrl})=>{
-					let obj={
+				res.data.artists.forEach(({
+					id,
+					name,
+					picUrl
+				}) => {
+					let obj = {
 						id,
 						name,
-						picUrl:picUrl+"?imageView=1&type=webp&thumbnail=369x0",
-						collectNum:Math.floor(Math.random()*200+10)
-						
+						picUrl: picUrl + "?imageView=1&type=webp&thumbnail=369x0",
+						collectNum: Math.floor(Math.random() * 200 + 10)
+
 					}
 					this.singers.push(obj)
-					console.log(obj)
 				})
+			})
+			// 请求歌曲数据
+			this.getMsg({
+				url: "personalized/newsong"
+			}).then(res => {
+				// 数据处理	
+				// 将返回的数组转为二维数组方便渲染
+
+
+				// 声明一个空数组
+				let arr = []
+				// 循环
+				res.data.result.forEach(({
+					id,
+					name,
+					picUrl,
+					song
+				}, i) => {
+					let obj = {
+						id,
+						name,
+						picUrl: picUrl + "?imageView=1&type=webp&thumbnail=369x0",
+						alnumName: song.album.name
+					}
+					// 将对象压入空数组
+					arr.push(obj)
+					// 判断
+					// 判断当前元素下标+1 %3 是否等于0 || i是否为最后一个下标 
+					if (!((i + 1) % 3) || i == res.data.result.length - 1) {
+						this.newestSong.push(arr)
+						arr = []
+					}
+				})
+
+			})
+			// 请求分类歌单
+			this.promise().then(res => {
+
+				res.forEach(item => {
+					if (item.name.indexOf("&") !== -1) {
+						item.replace(item.name.indexOf("&"), "%26");
+					}
+					this.getMsg({
+						url: "top/playlist",
+						data: {
+							limit: 10,
+							cat: item.name
+						}
+					}).then(res => {
+						let playlists = []
+						res.data.playlists.forEach(({
+							name,
+							id,
+							coverImgUrl,
+							trackCount
+						}) => {
+							let playinfo = {
+								id,
+								name,
+								coverImgUrl,
+								trackCount
+							}
+							playlists.push(playinfo)
+						})
+						let obj = {
+							cat: res.data.cat,
+							playlists,
+						}
+					this.sortSong.push(obj)
+					
+					})
+				})
+				
 			})
 		}
 	}
@@ -228,16 +366,16 @@
 	}
 
 	view.sort {
-		padding: 0 55rpx;
 		margin-bottom: 70rpx;
 	}
 
 	view.sort-title {
+		padding: 0 55rpx;
 		display: flex;
 		justify-content: space-between;
 		color: #333;
 		align-items: center;
-		margin-bottom: 20rpx;
+		margin-bottom: 30rpx;
 	}
 
 	view.sort-title>text:first-child {
@@ -252,8 +390,13 @@
 	}
 
 	view.recommends view.recommends-list {
-		display: flex;
 		float: left;
+		display: flex;
+	}
+
+	view.recommends view.recommends-list view.album:first-child,
+	view.recommends view.recommends-list view.Live-Band:first-child {
+		margin-left: 55rpx;
 	}
 
 	view.index view.index-albumplay {
@@ -261,5 +404,27 @@
 		bottom: 110rpx;
 		left: 0;
 		z-index: 100;
+	}
+
+	view.recommends view.song {
+		display: flex;
+		float: left;
+		padding-right: 20rpx;
+	}
+
+	view.recommends view.song>view:first-child {
+		padding-left: 40rpx;
+	}
+
+	view.recommends view.song view.songlist {
+		width: 600rpx;
+	}
+
+	view.recommends view.song view.songlist_play {
+		width: 80rpx;
+	}
+
+	view.recommends view.song view.songlist_play image {
+		width: 70%;
 	}
 </style>
