@@ -93,59 +93,8 @@
 			this.singer = options.singer;
 			this.albumName = options.AlbumName;
 			//实例化 音频对象
-			getSong: {
-				uni.request({
-					url: 'http://localhost:3000/song/url?id=' + this.id,
-				}).then(res => {
-					// console.log(res[1].data.data[0].url)
-					// 如果请求回来的url拿不到,那就弹出消息提示框
-					if (res[1].data.data[0].url) {
-						this.songUrl = res[1].data.data[0].url;
-						// 如果状态管理器里面没有实例化的音乐                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-						if (this.store.state.audioEle === '') {
-							//就实例化音乐
-							this.store.commit('setAudioEle', uni.createInnerAudioContext());
-							let {
-								audioEle
-							} = this.store.state;
-							if (!this.store.state.musicOn) { //如果当前没有音乐在播放的时候
-								audioEle.autoplay = true;
-								// console.log(this.songUrl)
-								audioEle.src = this.songUrl;
-								audioEle.loop = true;
-								//监听音乐进入播放的状态获取时长
-								audioEle.onCanplay(() => {
-									//获取当前音乐的总时长
-									this.store.commit('setSongLen', audioEle.duration)
-								})
-								audioEle.onTimeUpdate(() => {
-									//获取当前的播放时间，存到vuex中
-									// this.currentTime = audioEle.currentTime;
-
-									this.store.commit('setCurrentTime', audioEle.currentTime)
-								});
-								// 当音乐播放的时候
-								audioEle.onPlay(() => {
-									this.store.commit('setMusicOn', true);
-
-								});
-								// 当音乐暂停的时候
-								audioEle.onPause(() => {
-									this.store.commit('setMusicOn', false)
-								})
-							}
-						}
-					} else {
-						uni.showToast({
-							title: '暂无歌曲',
-							icon: 'loading'
-						})
-					}
-				}).then(
-					this.getLyric(this.id)
-
-				)
-			}
+		
+			
 		},
 		methods: {
 			//获取歌词

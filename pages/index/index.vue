@@ -180,12 +180,12 @@
 			// 歌单专辑自定义事件处理函数，用来传递参数到click-to-play组件
 			// 形参
 			sendAlnumId(alnumId){
-				console.log(alnumId)
+				
 				uni.$emit("updeta",alnumId)
 			},
 			// 首页歌曲点击事件处理函数，用来传递参数到click-to-play组件
 			sendSongID(songID){
-				console.log(songID)
+			
 				// 将首页歌曲的数组 替换到vuex中的播放列表页数组
 				// 将当前点击的歌曲id传递到click-to-play组件
 				uni.$emit("updeta",songID)
@@ -243,7 +243,7 @@
 					limit: 10
 				}
 			}).then(res => {
-				console.log(res)
+				// console.log(res)
 				res.data.artists.forEach(({
 					id,
 					name,

@@ -24,17 +24,84 @@
 		data() {
 			return {
 				//这里有个坑，应该是将专辑名字处理过后，才渲染，如果字符串过长应该截取拼接省略号
-						AlbumName:'不爱我',
-						songName:'不爱我',
-						singer:'薛之谦',
+						AlbumName:'',
+						songName:'暂无歌曲',
+						singer:'',
 			}
+		},
+		created() {
+			uni.$on('updeta',(params)=>{
+				console.log(params)
+				//如果当前是一首歌
+				if(params.songid){
+					// 获取歌曲的音频地址
+					this.getSong(params.songid);
+					//获取歌曲的详细信息
+					this.getSongDetail(params.songid);
+				}
+				
+			})
 		},
 		mounted() {
 			//当获取传过来的参数时，就实例化音频对象，并保存到vuex中
 			
-		
 		},
 		methods: {
+			//请求歌曲的详细信息，并实例化
+		 async getSong(sid){
+				let res = await this.$myReq({
+					url:'song/url?id=' + sid,
+					method:'GET'
+				});
+				// console.log(res)
+				let {url} =res.data.data[0];
+				
+				if(this.store.state.audioEle==""){
+				//实例化音频对象，存放进vuex
+				this.store.commit('setAudioEle',uni.createInnerAudioContext());
+				//将实例化的音频对象调出
+				let {audioEle} =this.store.state;
+				// 将音频的url 绑定在 实例化对象上
+				audioEle.src= url;
+				//默认开启循环，后期放入vuex，根据用户的操作改变
+				audioEle.loop=true;
+				//点击后就应该立即播放
+				audioEle.autoplay=true;
+				//若这个歌曲可以播放的话，就获取音乐的长度，放入store状态管理
+				audioEle.onCanplay(()=>{
+					this.store.commit('setSongLen',audioEle.duration)
+				});
+				audioEle.onTimeUpdate(() => {
+					//获取当前的播放时间，存到vuex中
+					// this.currentTime = audioEle.currentTime;
+					this.store.commit('setCurrentTime', audioEle.currentTime)
+				});
+				// 当音乐播放的时候,就把音乐的状态改变成在播放
+				audioEle.onPlay(() => {
+					this.store.commit('setMusicOn', true);
+				});
+				// 当音乐暂停的时候，音乐的状态改变成没有在播放
+				audioEle.onPause(() => {
+					this.store.commit('setMusicOn', false)
+				});
+				}else{
+					//将实例化的音频对象调出
+					let {audioEle} =this.store.state;
+					//替换实例化的路径
+					audioEle.src=url
+				}
+			},
+			async getSongDetail(sid){
+				let res = await this.$myReq({
+					url:'song/detail?ids='+sid,
+					method:'GET'
+				});
+			console.log(res);
+			//获取歌曲的名字
+			let Name = res.data.songs[0].name;
+			console.log(Name)
+			this.songName=Name
+			},
 			//点击底部音乐栏就去歌曲单页
 		toSong(){
 			uni.navigateTo({
