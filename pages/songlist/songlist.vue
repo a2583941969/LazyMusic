@@ -72,8 +72,9 @@
 			async getsong(id, status) {
 				if (status == 'true') {
 					//歌单接口
+					let url="playlist/detail?id="+id;
 					let res = await this.$myReq({
-						url: "playlist/detail?id=819618896",
+						url:url,
 						method: 'GET'
 					});
 					this.songlist = res.data.playlist;

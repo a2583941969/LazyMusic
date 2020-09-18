@@ -1,3 +1,5 @@
+
+
 <template>
 	<view class="ablum">
 		<view class="up" :style="{backgroundImage:'url('+img+')'}">
