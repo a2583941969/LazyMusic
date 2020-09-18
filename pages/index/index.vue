@@ -25,7 +25,7 @@
 			<scroll-view scroll-x="true">
 				<view class="recommends-list">
 					<block v-for="(item,i) of recommends" :key="i">
-						<my-alnum :name="item.name" :id="item.id" :page_img="item.picUrl" :chanteur="item.artist.name" :total_songs="item.trackCount"></my-alnum>
+						<my-alnum :name="item.name" :id="item.id" :page_img="item.picUrl" :chanteur="item.artist.name" :total_songs="item.trackCount" @sendAlnumId="sendAlnumId"></my-alnum>
 					</block>
 				</view>
 			</scroll-view>
@@ -39,7 +39,7 @@
 			<scroll-view scroll-x="true">
 				<view class="recommends-list">
 					<block v-for="(item,i) of playlist" :key="i">
-						<my-alnum :name="item.name" :id="item.id" :page_img="item.picUrl" :total_songs="item.trackCount"></my-alnum>
+						<my-alnum :name="item.name" :id="item.id" :page_img="item.picUrl" :total_songs="item.trackCount" @sendAlnumId="sendAlnumId"></my-alnum>
 					</block>
 				</view>
 			</scroll-view>
@@ -68,7 +68,7 @@
 				<view class="song">
 					<view v-for="(arritem,i) of newestSong" :key="i">
 						<block v-for="(item,key) of arritem" :key="key">
-							<my-songlist :sid="item.id" :sname="item.name" :alnumName="item.alnumName" :sing_img="item.picUrl">
+							<my-songlist :sid="item.id" :sname="item.name" :alnumName="item.alnumName" :sing_img="item.picUrl" @click.native="sendSongID({songid:item.id})">
 								<view class="songlist_play">
 									<image src="../../static/icon/play.png" mode="widthFix"></image>
 								</view>
@@ -88,7 +88,7 @@
 				<scroll-view scroll-x="true">
 					<view class="recommends-list">
 						<block v-for="(item,key) of classify.playlists" :key="key">
-							<my-alnum :name="item.name" :id="item.id" :page_img="item.coverImgUrl" :total_songs="item.trackCount"></my-alnum>
+							<my-alnum :name="item.name" :id="item.id" :page_img="item.coverImgUrl" :total_songs="item.trackCount" @sendAlnumId="sendAlnumId"></my-alnum>
 						</block>
 					</view>
 				</scroll-view>
@@ -176,6 +176,19 @@
 					url: "/pages/SearchPage/SearchPage",
 					animationType: "zoom-fade-out"
 				})
+			},
+			// 歌单专辑自定义事件处理函数，用来传递参数到click-to-play组件
+			// 形参
+			sendAlnumId(alnumId){
+				console.log(alnumId)
+				uni.$emit("updeta",alnumId)
+			},
+			// 首页歌曲点击事件处理函数，用来传递参数到click-to-play组件
+			sendSongID(songID){
+				console.log(songID)
+				// 将首页歌曲的数组 替换到vuex中的播放列表页数组
+				// 将当前点击的歌曲id传递到click-to-play组件
+				uni.$emit("updeta",songID)
 			}
 		},
 		mounted() {
@@ -417,6 +430,7 @@
 	}
 
 	view.recommends view.song view.songlist {
+
 		width: 600rpx;
 	}
 

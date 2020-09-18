@@ -49,7 +49,7 @@
 		props: ["sid", "sname", "alnumName", "singer", "isAlnum", "sing_img"],
 		data() {
 			return {
-
+				
 			}
 		},
 		methods: {
@@ -82,17 +82,18 @@
 	}
 
 	view.songlist>view.songlist-info {
-		flex: 1;
 		display: flex;
+		width: 60%;
 		flex-direction: column;
 		justify-content: center;
 	}
 
 	view.songlist>view.songlist-info>view {
-		overflow: hidden;
+		
 		line-height: 2;
 		text-overflow: ellipsis;
-		whitewhite-space: nowrap;
+		overflow: hidden;
+		white-space: nowrap;
 	}
 
 	view.songlist>view.songlist-info>view:first-child {

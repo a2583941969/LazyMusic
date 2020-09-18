@@ -31,13 +31,17 @@
 		methods: {
 			// 点击播放本歌单的函数
 			playThisAlnum() {
-				// 发送获取当前歌单歌曲的请求
-				// 发送获取当前歌单第一首歌url的请求
-				console.log(132132)
+				// 判断是专辑还是歌单
+				// ture为歌单  false为专辑
+				let isAlnum=this.total_songs?true:false;
+				this.$emit("sendAlnumId",{id:this.id,isAlnum})
 			},
 			goto() {
-				console.log(this.id)
 				let bool=false
+				if(this.total_songs){
+					bool=true
+				}
+				
 				uni.navigateTo({
 					url: "/pages/songlist/songlist?id="+this.id+"&status="+bool,
 					animationType: "none"
