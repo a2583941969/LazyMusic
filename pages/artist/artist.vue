@@ -58,7 +58,7 @@
 					<!-- 专辑选项卡 -->
 					<view v-else="this.active==1" class="albumbox" >
 						<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of albumItems" :key="k" :sid="i.id" :sname="i.name" 
-						 :alnumName="i.publictime" :singer="i.name" :sing_img="i.picUrl" :isAlnum="false" @click.native="toAblumlist(i.id,true)">
+						 :alnumName="i.publictime" :singer="i.name" :sing_img="i.picUrl" :isAlnum="false" @click.native="toAblumlist(i.id,false)">
 							<slot>
 								<view class="songsize">
 									{{i.size}}首歌曲
