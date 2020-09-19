@@ -25,7 +25,8 @@
 			<scroll-view scroll-x="true">
 				<view class="recommends-list">
 					<block v-for="(item,i) of recommends" :key="i">
-						<my-alnum :name="item.name" :id="item.id" :page_img="item.picUrl" :chanteur="item.artist.name" :total_songs="item.trackCount" @sendAlnumId="sendAlnumId"></my-alnum>
+						<my-alnum :name="item.name" :id="item.id" :page_img="item.picUrl" :chanteur="item.artist.name" :total_songs="item.trackCount"
+						 @sendAlnumId="sendAlnumId"></my-alnum>
 					</block>
 				</view>
 			</scroll-view>
@@ -88,7 +89,8 @@
 				<scroll-view scroll-x="true">
 					<view class="recommends-list">
 						<block v-for="(item,key) of classify.playlists" :key="key">
-							<my-alnum :name="item.name" :id="item.id" :page_img="item.coverImgUrl" :total_songs="item.trackCount" @sendAlnumId="sendAlnumId"></my-alnum>
+							<my-alnum :name="item.name" :id="item.id" :page_img="item.coverImgUrl" :total_songs="item.trackCount"
+							 @sendAlnumId="sendAlnumId"></my-alnum>
 						</block>
 					</view>
 				</scroll-view>
@@ -104,6 +106,9 @@
 	import mySonglist from "../../myComponents/my-songlist/mySongList.vue"
 	import myTabbar from "../../myComponents/my-tabbar/myTabbar.vue"
 	import myLiveBand from "../../myComponents/my-LiveBand/myLiveBand.vue"
+	import {
+		mapMutations
+	} from 'vuex'
 	export default {
 		components: {
 			myAlnum,
@@ -136,6 +141,7 @@
 			}
 		},
 		methods: {
+			...mapMutations(["setonPlayList"]),
 			// 封装请求方法
 			getMsg({
 				url,
@@ -179,16 +185,21 @@
 			},
 			// 歌单专辑自定义事件处理函数，用来传递参数到click-to-play组件
 			// 形参
-			sendAlnumId(alnumId){
-				
-				uni.$emit("updeta",alnumId)
+			sendAlnumId(alnumId) {
+				uni.$emit("updeta", alnumId)
 			},
 			// 首页歌曲点击事件处理函数，用来传递参数到click-to-play组件
-			sendSongID(songID){
-			
+			sendSongID(songID) {
+				// 将数组扁平化的函数
+				function flatArray(arr) {
+					return arr.reduce((result, value) => {
+						return result.concat(Array.isArray(value) ? flatArray(value) : value)
+					}, [])
+				}
 				// 将首页歌曲的数组 替换到vuex中的播放列表页数组
+				 this.setonPlayList(flatArray(this.newestSong))
 				// 将当前点击的歌曲id传递到click-to-play组件
-				uni.$emit("updeta",songID)
+				uni.$emit("updeta", songID)
 			}
 		},
 		mounted() {
@@ -326,11 +337,11 @@
 							cat: res.data.cat,
 							playlists,
 						}
-					this.sortSong.push(obj)
-					
+						this.sortSong.push(obj)
+
 					})
 				})
-				
+
 			})
 		}
 	}

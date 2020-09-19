@@ -13,7 +13,7 @@
 		<!-- 插槽 默认显示歌曲下载 -->
 		<view class="sing-count">	
 			<slot>
-				<view class="songlist-right-btn" @click="openDownLoad">
+				<view class="songlist-right-btn" @click.stop="openDownLoad">
 				</view>
 				<uni-popup ref="popup" type="bottom">
 					<view class="bottom">
@@ -67,7 +67,7 @@
 		box-sizing: border-box;
 		display: flex;
 		justify-content: space-between;
-		background-color: #eaeaea;
+		background-color:#eee;
 	}
 
 	view.songlist>view.songlist-leftimg {
@@ -117,7 +117,7 @@
 	}
 
 	view.songlist view.sing-count {
-		font-size: 28rpx;
+		font-size: 26rpx;
 		color: #666;
 		display: flex;
 		align-items: center;
