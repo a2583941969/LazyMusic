@@ -13,7 +13,7 @@
 		<!-- 插槽 默认显示歌曲下载 -->
 		<view class="sing-count">	
 			<slot>
-				<view class="songlist-right-btn"@click.stop.prevent.self="openDownLoad">
+				<view class="songlist-right-btn" @click.stop.prevent.self="openDownLoad">
 				</view>
 				<uni-popup ref="popup" type="bottom">
 					<view class="bottom">
