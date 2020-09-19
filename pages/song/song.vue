@@ -4,7 +4,7 @@
 		<swiper-item>
 			<view class="playPage">
 				<view class="song">
-					<image :src="bgimage" mode="" class="bg-set"></image>
+					<image :src="bgimage" mode="widthFix" class="bg-set"></image>
 					<!-- 歌曲页面状态栏,点击之后返回上一页 -->
 					<view class="songStatusBar" @click="navigatorBack">
 						<image src="../../static/icon/arrow-down.png" mode=""></image>
