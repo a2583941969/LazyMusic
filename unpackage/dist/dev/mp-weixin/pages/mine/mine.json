@@ -1,4 +1,6 @@
 {
   "navigationBarTextStyle": "black",
-  "usingComponents": {}
+  "usingComponents": {
+    "my-tabbar": "/myComponents/my-tabbar/myTabbar"
+  }
 }
