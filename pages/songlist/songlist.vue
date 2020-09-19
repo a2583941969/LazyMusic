@@ -35,7 +35,7 @@
 				<!-- 歌曲列表 -->
 				<view class="songbox">
 					<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of songlist.tracks||ablumlist" :key="k" :sid="i.id" :sname="i.name"
-					 :alnumName="i.al.name" :singer="i.ar[0].name" :sing_img="i.al.picUrl" :isAlnum="false">
+					 :alnumName="i.al.name" :singer="i.ar[0].name" :sing_img="i.al.picUrl" :isAlnum="false" @click.native="playSong({songid:i.id})">
 					</my-songlist>
 					<!-- 歌曲列表项 -->
 				</view>
@@ -57,18 +57,27 @@
 				songlist: '',
 				ablumlist: '',
 				ablumtitle: '',
-				img: ''
+				img: '',
+				id:'',
+				status:'',
+				
 			}
 		},
 		onLoad: function(option) {
 			console.log(option)
 			// console.log(option.id)
 			console.log(option.status, typeof(option.status))
-			let id = option.id * 1;
-			let status = option.status;
-			this.getsong(id, status)
+			this.id = option.id * 1;
+			this.status = option.status;
+			this.getsong(this.id, this.status)
 		},
 		methods: {
+			//点击播放
+			playSong(songID){
+				uni.$emit("updeta",songID)
+			},
+			
+			// 获取歌曲列表
 			async getsong(id, status) {
 				if (status == 'true') {
 					//歌单接口
@@ -125,7 +134,15 @@
 				console.log('下载')
 			},
 			playAll() {
-				console.log('播放全部')
+				if(this.status==false){
+					//歌单
+					// this.songlist.tracks
+					uni.$emit("updeta",{songListID:this.id,status:this.status})
+				}else{
+					// 专辑
+					// this.ablumlist
+					uni.$emit("updeta",{albumID:this.id,status:this.status})
+				}
 			}
 		},
 		created() {
