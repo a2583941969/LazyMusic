@@ -7,7 +7,8 @@
           <uni-search-bar :radius="100" v-model="value" cancelButton="none" placeholder="搜索音乐、歌手、专辑" bgColor="#fff"></uni-search-bar>
         </view>
         <view class="search-cancel">
-          <navigator open-type="navigateBack">取消</navigator>
+          <!-- <navigator>取消</navigator> -->
+         <view class=""  @click.native="goIndex">取消</view>
         </view>
       </view>
       <view class="SegmentedControl">
@@ -25,32 +26,28 @@
       <scroll-view scroll-y="true" class="search-scroll">
         <view v-if="this.active == 0">
           <my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of info" :key="k" :sid="i.id" :sname="i.name"
-            :alnumName='i.al.name' :singer='i.ar[0].name' :sing_img="i.al.picUrl" :isAlnum="false"></my-songlist>
+            :alnumName='i.al.name' :singer='i.ar[0].name' :sing_img="i.al.picUrl" :isAlnum="false" @click.native="playSong({songid:i.id})"></my-songlist>
         </view>
         <view v-else-if="this.active == 1">
           <my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of info" :key="k" :sid="i.id" :sname="i.name"
-            :alnumName='i.al.name' :singer='i.ar[0].name' :sing_img="i.al.picUrl" :isAlnum="false"></my-songlist>
+            :alnumName='i.al.name' :singer='i.ar[0].name' :sing_img="i.al.picUrl" :isAlnum="false" @click.native="playSong({songid:i.id})"></my-songlist>
         </view>
         <view v-else-if="this.active == 2">
           <my-songlist style="margin-bottom: 30rpx;" v-for="(z,j) of info" :key='j' :sid="z.id" :sname="z.name" :singer='z.artist.name'
-            :sing_img="z.picUrl" :isAlnum="false">
-            <slot>
-              <view class="">{{z.size}}首单曲</view>
-            </slot>
+            :sing_img="z.picUrl" :isAlnum="false" @click.native="GoToAlnums(z.id)">
+            <view class="">{{z.size}}首单曲</view>
           </my-songlist>
         </view>
         <view v-else='this.active==3'>
           <my-songlist style="margin-bottom: 30rpx;" v-for="(singer,index) of info " :sid="singer.id" :sname="singer.name"
-            :sing_img="singer.picUrl">
-            <slot>
-              <view class="">{{singer.albumSize}}首单曲</view>
-            </slot>
+            :sing_img="singer.picUrl" @click.native="goSongList(singer.id)">
+            <view class="">{{singer.albumSize}}首单曲</view>
           </my-songlist>
         </view>
       </scroll-view>
-      <view class="search-albumplay">
-        <AlbumPlay></AlbumPlay>
-      </view>
+    </view>
+    <view class="search-albumplay">
+      <AlbumPlay></AlbumPlay>
     </view>
 
   </view>
@@ -104,7 +101,6 @@
       }
     },
     methods: {
-
       // 点击切换nav
       NavClick(e) {
         let {
@@ -138,12 +134,43 @@
               arr = res.data.result.artists
             }
             arr.forEach(item => {
-              item.picUrl = item.picUrl + '?imageView=1&type=webp&thumbnail=246x0'// 将图片路径拼接上移动端使用的路径
+              item.picUrl = item.picUrl + '?imageView=1&type=webp&thumbnail=246x0' // 将图片路径拼接上移动端使用的路径
               this.info.push(item)
             })
             console.log(res)
           })
       },
+      // 点击播放歌曲
+      playSong(songID) {
+        // 将首页歌曲的数组 替换到vuex中的播放列表页数组
+        // 将当前点击的歌曲id传递到click-to-play组件
+        uni.$emit("updeta", songID)
+      },
+      // 跳转到专辑页面
+      GoToAlnums(id) {
+        let sid = id;
+        let bool = false;
+        // this.$router.push({path:'/pages/songlist/songlist',params:{id:id,status:status}})
+        uni.navigateTo({
+          url: "/pages/songlist/songlist?id=" + sid + '&status=' + bool,
+          animationType: "none"
+        })
+      },
+      // 跳转到歌手信息页面
+      goSongList(id) {
+        let sid = id;
+        uni.navigateTo({
+          url: "/pages/artist/artist?id=" + sid,
+          animationType: "none"
+        })
+      },
+      // 返回首页
+      goIndex(){
+        uni.navigateTo({
+          url:'/pages/index/index',
+          animationType:'none'
+        })
+      }
     },
     watch: {
       value() {
@@ -151,6 +178,7 @@
         clearTimeout(this.TimeId);
         if (this.value.value.trim()) {
           this.TimeId = setTimeout(() => {
+            this.info=[];
             this.getinfo()
           }, 1000)
         }
@@ -159,7 +187,6 @@
     onReachBottom() {
       this.page++;
       this.getinfo()
-      console.log('到底啦')
     }
   }
 </script>
@@ -167,18 +194,21 @@
 <style scoped>
   .search-page {
     position: relative;
+    background-color: #FFFFFF;
   }
-  .search-page>.first{
+
+  .search-page>.first {
     background-color: #FFFFFF;
   }
 
   .search-page>.first>.search-head {
     width: 100%;
-    padding: 0 30rpx;
+    padding: 60rpx 30rpx;
     display: flex;
     align-items: center;
     position: fixed;
-    top: 0;
+    /* top: 40rpx; */
+    top: 0rpx;
     left: 0;
     z-index: 20;
     background-color: #FFFFFF;
@@ -196,8 +226,8 @@
   }
 
   .search-page>.first>.SegmentedControl {
-    position: fixed;
-    top: 104rpx;
+   position: fixed;
+    top: 164rpx;
     left: 0;
     z-index: 21;
     background-color: #fff;
@@ -225,13 +255,12 @@
   }
 
   .search-page>.content {
-
     font-size: 24rpx;
     margin-top: 20rpx;
   }
 
   .search-scroll {
-    padding: 160rpx 40rpx 0;
+    padding: 240rpx 8rpx 0;
     margin-bottom: 120rpx;
   }
 

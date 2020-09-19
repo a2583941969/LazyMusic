@@ -4,21 +4,19 @@
 		<swiper-item>
 			<view class="playPage">
 				<view class="song">
-					<image :src="bgimage" mode="" class="bg-set"></image>
+					<image :src="bgimage" mode="widthFix" class="bg-set"></image>
 					<!-- 歌曲页面状态栏,点击之后返回上一页 -->
 					<view class="songStatusBar" @click="navigatorBack">
 						<image src="../../static/icon/arrow-down.png" mode=""></image>
 					</view>
 					<!-- 歌曲页背景文字区域 -->
 					<view class="songContent">
-						<text class="albumName-title">{{songName}}</text>
-						<text class="albumName">来自专辑：{{albumName}}</text>
-						<text class="singer">{{singer}}</text>
+						<text class="albumName-title">{{this.store.state.songName}}</text>
+						<text class="albumName">来自专辑：{{this.store.state.albumName.length?this.store.state.albumName:'暂无专辑'}}</text>
+						<text class="singer">{{this.store.state.singer}}</text>
 					</view>
 					<view class="lyric">
-						<text>你快听，是我在，是我在，是我在，哼你最爱的听旋律</text>
-						<text>你快听，滴答滴，滴答滴，窗外又在下雨</text>
-						<text>难道这，不是你最爱的天气</text>
+						
 					</view>
 					<view class="process">
 						<slider backgroundColor="#7f8fa6" activeColor="#fad390" :value="this.store.state.currentTime" min="0" :max="this.store.state.songLength"
@@ -87,14 +85,8 @@
 			}
 		},
 		onLoad(options) {
-			// console.log(this.store.state.musicOn)
-			//将组建点击之后传过来的参数进行分配，   
-			this.songName = options.songName;
-			this.singer = options.singer;
-			this.albumName = options.AlbumName;
-			//实例化 音频对象
-		
-			
+			//获取传过来的专辑图片
+			this.bgimage = options.albumPic
 		},
 		methods: {
 			//获取歌词
@@ -203,7 +195,7 @@ page {color: #FFFFFF;}
 .playPage>.song{width: 100%;height: 80vh;}
 .playPage>.song::before{content:'';display: block;width: 100%;height:70%;bottom: 0; position: absolute;z-index: -1;background: linear-gradient(top,#FFFFFF00,#1d283d,#1d283d,#1d283d,#1d283d,#172238);}
 .playPage>.song::after{content:'';display: block;width: 100%;height:100%;position: absolute;top:0;z-index: -2;background: linear-gradient(bottom,#172238,#FFFFFF00);}
-.process{margin-top: 130rpx;}
+.process{margin-top: 200rpx;}
 .playPage .playBox .more {width: 750rpx;display: flex;flex-wrap: nowrap;justify-content: center;}
 .playPage .playBox .more>view {margin-top: 50rpx;width: 50rpx;height: 50rpx;font-size: 12rpx;}
 .playPage .lyric {margin: 30rpx 90rpx;font-size: 30rpx;overflow: hidden;height: 150rpx;margin-bottom: 110rpx;text-align: center;}
@@ -213,7 +205,7 @@ page {color: #FFFFFF;}
 .playPage .playControl>image {width: 50rpx;height: 50rpx;}.playPage .playControl>image:nth-child(3) {width: 150rpx;height: 150rpx;}
 .playPage .playControl>image:not(:nth-child(3)) {margin-top: 60rpx;}
 .playPage .playBox {width: 750rpx;height: 40%;position: absolute;bottom: 0;background-color: transparent;}
-.playPage .songContent {margin-top: 28%;margin-left: 90rpx;margin-right: 90rpx;}
+.playPage .songContent {margin-top: 20%;margin-left: 90rpx;margin-right: 90rpx;}
 .playPage .albumName-title {font-size: 70rpx;overflow: hidden;text-overflow: ellipsis;white-space: nowrap}
 .playPage .albumName,.playPage .singer {font-size: 25rpx;}
 .songContent>text {display: block;padding-bottom: 15rpx;}

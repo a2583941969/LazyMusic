@@ -11,7 +11,7 @@
 			<view class="mianinfo">
 				<!-- 专辑/歌手标题 -->
 				<view class="ablumtitle">
-					<view class="artistname">
+					<view class="artistname" v-if="artistInfo.artist">
 						{{artistInfo.artist.name}}
 					</view>
 					<view class="artistbtn">
@@ -50,9 +50,9 @@
 								</view>
 							</view>
 						</view>
-						<view class="songbox">
+						<view class="songbox" v-if="artistInfo">
 							<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of artistInfo.hotSongs" :key="k" :sid="i.id" :sname="i.name"
-							 :alnumName="i.al.name" :singer="i.ar[0].name" :sing_img="i.al.picUrl" :isAlnum="false">
+							 :alnumName="i.al.name" :singer="i.ar[0].name" :sing_img="i.al.picUrl" :isAlnum="false" @click.native="playSong({songid:i.id})">
 							</my-songlist>
 							<!-- 歌曲列表项 -->
 						</view>
@@ -61,11 +61,9 @@
 					<view v-else="this.active==1" class="albumbox">
 						<my-songlist style="margin-bottom: 30rpx;" v-for="(i,k) of albumItems" :key="k" :sid="i.id" :sname="i.name"
 						 :alnumName="i.publictime" :singer="i.name" :sing_img="i.picUrl" :isAlnum="false" @click.native="toAblumlist(i.id)">
-							<slot>
 								<view class="songsize">
 									{{i.size}}首歌曲
 								</view>
-							</slot>
 						</my-songlist>
 					</view>
 				</view>
@@ -84,8 +82,8 @@
 		data() {
 			return {
 				active: 0,
-				artistInfo: null,
-				albumItems: null,
+				artistInfo: [],
+				albumItems: [],
 				// img: 'http://p1.music.126.net/gA6MMdcY7WRNm0bs3W4E7w==/18651015743968707.jpg',
 				img: '',
 				items: ['热门歌曲', '全部专辑']
@@ -97,6 +95,10 @@
 			this.getArtist(id)
 		},
 		methods: {
+			//点击播放
+			playSong(songID){
+				uni.$emit("updeta",songID)
+			},
 			//选项卡切换
 			NavClick(e) {
 				let {
@@ -121,12 +123,6 @@
 					url: url,
 					method: 'GET'
 				});
-				// console.log(res.data);
-				// console.log(res.data.hotAlbums[0].name);
-				// console.log(res.data.hotAlbums[0].picUrl);
-				// console.log(res.data.hotAlbums[2].size);
-				// console.log(res.data.hotAlbums[2].id);
-				// console.log(res.data.hotAlbums[2].publishTime);
 				let datas = res.data.hotAlbums;
 				for (let i of datas) {
 					let date = new Date(i.publishTime);
@@ -145,22 +141,9 @@
 			async getArtist(id) {
 				let url='artists?id='+id;
 				let res = await this.$myReq({
-					// url:"song/url?id=1407551413",
-					// url:"top/playlist/highquality?before=1503639064232&limit=6",
-					// url: "playlist/detail?id=819618896", 
-					//819618896 3025491905  	3025491896 3025496710
 					url: url,
 					method: 'GET'
 				});
-				// this.artistSong = res.data.playlist;
-				// console.log(res.data);
-				// console.log(res.data.artist.name);//歌手名
-				// console.log(res.data.artist.img1v1Url);//歌手图片
-				// console.log(res.data.hotSongs[0]);//热门歌曲
-				// console.log(res.data.hotSongs[0].al.picUrl);//歌曲图片
-				// console.log(res.data.hotSongs[0].name);//歌曲名
-				// console.log(res.data.hotSongs[0].al.name);//专辑名
-				// this.artistSong=res.data.hotSongs;
 				this.artistInfo = res.data;
 				this.img = res.data.artist.img1v1Url;
 				//动态修改导航栏标题

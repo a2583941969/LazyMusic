@@ -10,7 +10,10 @@ export default new Vuex.Store({
 	songLength:'',
 	currentTime:'',
 	// 正在的播放的歌曲所在列表
-	onPlayList:[]
+	onPlayList:[],
+	singer:'',
+	songName:'',
+	albumName:''
   },
   mutations: {
 		// 查看是否正在播放音乐
@@ -28,6 +31,15 @@ export default new Vuex.Store({
 		},
 		setonPlayList(state,onPlayList){
 			state.onPlayList=onPlayList
+		},
+		setSinger(state,singer){
+			state.singer = singer
+		},
+		setSongName(state,songName){
+			state.songName = songName
+		},
+		setAlbumName(state,albumName){
+			state.albumName = albumName
 		}
   },
   actions: {
