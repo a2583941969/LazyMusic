@@ -3,10 +3,21 @@
 		<view class="bottomBox" @click="toSong">
 			<!-- 音乐图片 -->
 			<view class="albumAvatar">
-				<image src="../../static/icon/homeselect.png"></image>
+				<image :src="albumPicUrl"></image>
 			</view>
 			<!-- 音乐名字 -->
-			<text class="songName">{{songName}}/{{singer}}</text>
+			<view class="song" v-if="this.store.state.audioEle">
+				<view class="songName">
+					<text class="songNameItem">{{this.store.state.songName}}</text>
+				</view>
+				
+				<text>/</text>
+				
+				<text class="singer">{{this.store.state.singer}}</text>
+			</view>
+			<view v-else class="song">
+				<text>美好的一天，从音乐开始哦</text>
+			</view>
 			<!-- 音乐按钮 -->
 			<view class="albumPlay">
 				<!-- 阻止事件冒泡，点击对应按钮，开始不同的操作 -->
@@ -23,10 +34,7 @@
 		// props: ["AlbumImg", "AlbumName", "singer",songLength，songName],
 		data() {
 			return {
-				//这里有个坑，应该是将专辑名字处理过后，才渲染，如果字符串过长应该截取拼接省略号
-						AlbumName:'',
-						songName:'暂无歌曲',
-						singer:'',
+				albumPicUrl:''		
 			}
 		},
 		created() {
@@ -39,7 +47,6 @@
 					//获取歌曲的详细信息
 					this.getSongDetail(params.songid);
 				}
-				
 			})
 		},
 		mounted() {
@@ -95,17 +102,23 @@
 				let res = await this.$myReq({
 					url:'song/detail?ids='+sid,
 					method:'GET'
-				});
-			console.log(res);
+				});		 
 			//获取歌曲的名字
-			let Name = res.data.songs[0].name;
-			console.log(Name)
-			this.songName=Name
+			let Name = res.data.songs[0];
+			this.store.commit('setSongName',Name.name)
+			//获取歌手的名字，如果歌手不存在，就默认为佚名
+			if(Name.ar[0].name){
+			this.store.commit('setSinger',Name.ar[0].name);
+			//获取专辑的名字
+			this.store.commit('setAlbumName',Name.al.name);
+			//获取专辑的图片
+			this.albumPicUrl = Name.al.picUrl +"?imageView=1&type=webp&thumbnail=50x0"
+			}
 			},
 			//点击底部音乐栏就去歌曲单页
 		toSong(){
 			uni.navigateTo({
-				url:`../../pages/song/song?AlbumName=${this.AlbumName}&singer=${this.singer}&songName=${this.songName}`
+				url:`../../pages/song/song?albumPic=${this.albumPicUrl}`
 			});
 		},
 		playMusic(){
@@ -126,6 +139,7 @@
 </script>
 
 <style>
+
 	.bottomBox {
 		flex-direction: row;
 		justify-content: end;
@@ -145,14 +159,14 @@
 		left: 30rpx;
 		z-index: 2;
 		border-radius: 50%;
-		background-color: orange;
+		background-color: #D3D3D3;
 		
 	}
 
 	.albumAvatar>image {
 		width: 100%;
 		height: 100%;
-
+		border-radius: 50%;
 	}
 
 	.albumPlay {
@@ -172,14 +186,43 @@
 		margin-left: 40rpx;
 	}
 
-	.songName {
+	.song {
+		display: flex;
 		color: black;
-		margin: 0rpx 20rpx 0rpx 180rpx;
+		margin: 0rpx 0rpx 0rpx 180rpx;
 		font-size: 25rpx;
-		padding-top: 20rpx;
+		padding-top: 10rpx;
 		position: absolute;
-		width: 55%;
-		height: 35rpx;
+		width: 58%;
+		height: 55rpx;
 		overflow: hidden;
+		justify-content: center;
+		align-items: center;
+	}
+	.song>text:nth-child(2){
+		margin: 0 10rpx;
+	}
+	@keyframes songNameScroll{
+		0%{
+			transform: translateX(0);
+		}
+		100%{
+			transform: translateX(-100%);
+		}
+	}
+	.song>.songName{
+		overflow: hidden;
+		white-space: nowrap;
+	}
+	.songName .songNameItem {
+		display: inline-block;
+		padding-left:20rpx ;
+		animation: songNameScroll 5s linear infinite ;
+	}
+	.song>.singer{
+		width: 50%;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
 	}
 </style>
