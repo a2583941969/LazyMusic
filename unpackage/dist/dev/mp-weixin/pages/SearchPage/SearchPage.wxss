@@ -1,0 +1,85 @@
+
+.search-page.data-v-1ff10234 {
+  position: relative;
+}
+.search-page>.first.data-v-1ff10234 {
+  background-color: #FFFFFF;
+}
+.search-page>.first>.search-head.data-v-1ff10234 {
+  width: 100%;
+  padding: 0 30rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  background-color: #FFFFFF;
+}
+.search-page>.first>.search-head>.head-left.data-v-1ff10234 {
+  width: 600rpx;
+}
+.search-page>.first>.search-head>.search-cancel.data-v-1ff10234 {
+  font-size: 26rpx;
+  padding-left: 20rpx;
+  color: #aaa;
+  background-color: #FFFFFF;
+}
+.search-page>.first>.SegmentedControl.data-v-1ff10234 {
+  position: fixed;
+  top: 104rpx;
+  left: 0;
+  z-index: 21;
+  background-color: #fff;
+  padding: 20rpx 0;
+  width: 100%;
+}
+.search-page>.first>.SegmentedControl>.container.data-v-1ff10234 {
+  width: 460rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  font-size: 26rpx;
+}
+.search-page>.first>.SegmentedControl>.container>.nav-item.data-v-1ff10234 {
+  color: #999;
+  padding-bottom: 10rpx;
+}
+.active.data-v-1ff10234 {
+  color: #000000;
+  border-bottom: 2px solid #000000;
+  padding-bottom: 10rpx;
+}
+.search-page>.content.data-v-1ff10234 {
+
+  font-size: 24rpx;
+  margin-top: 20rpx;
+}
+.search-scroll.data-v-1ff10234 {
+  padding: 160rpx 40rpx 0;
+  margin-bottom: 120rpx;
+}
+.to-search.data-v-1ff10234 {
+  position: absolute;
+  top: 260rpx;
+  left: 0;
+  text-align: center;
+  width: 100%;
+  color: #AAAAAA;
+  font-size: 26rpx;
+}
+.search-albumplay.data-v-1ff10234 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+

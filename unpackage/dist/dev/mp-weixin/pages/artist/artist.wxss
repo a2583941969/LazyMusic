@@ -1,0 +1,182 @@
+
+.albumbox {
+	margin-bottom: 40rpx;
+	padding-bottom: 40rpx;
+}
+.artist-albumplay {
+	position: fixed;
+	bottom: 0;
+}
+.songsize {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+}
+.SegmentedControl {
+	margin-top: 20rpx;
+	width: 90%;
+}
+.SegmentedControl>.container {
+	width: 270rpx;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	        justify-content: space-between;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	font-size: 26rpx;
+}
+.SegmentedControl>.container>.nav-item {
+	color: #999;
+	padding-bottom: 10rpx;
+}
+.active {
+	color: #000000;
+	border-bottom: 2px solid #000000;
+	padding-bottom: 15rpx;
+}
+.content {
+	width: 90%;
+	padding: 0 26rpx;
+	margin-top: 20rpx;
+	font-size: 24rpx;
+}
+.songbox {
+	width: 100%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-flow: column nowrap;
+	        flex-flow: column nowrap;
+	-webkit-box-pack: space-evenly;
+	-webkit-justify-content: space-evenly;
+	        justify-content: space-evenly;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	margin: 40rpx 0;
+}
+.ablumbtn .smbtn {
+	width: 200rpx;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	        justify-content: space-between;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+}
+.ablumbtn .smbtn image {
+	width: 35rpx;
+	height: 35rpx;
+}
+.ablumbtn .playall image {
+	width: 30rpx;
+	height: 30rpx;
+	vertical-align: middle;
+}
+.ablumbtn .playall {
+	width: 150rpx;
+	background-color: #f9f9f9;
+	border-radius: 50rpx;
+	font-size: 24rpx;
+	padding: 15rpx 25rpx;
+	color: #333;
+	text-align: center;
+	line-height: ;
+}
+.ablumbtn {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	        justify-content: space-between;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	width: 100%;
+}
+.ablumtitle {
+	width: 90%;
+	background-color: #fff;
+	margin: 50rpx 0;
+}
+.artistname {
+	font-size: 40rpx;
+	font-weight: bold;
+	color: #000;
+}
+.artistbtn {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	font-size: 23rpx;
+	margin-top: 35rpx;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	line-height: 24rpx;
+}
+.artistbtn view:first-child {
+	margin-right: 80rpx;
+}
+.artistbtn image {
+	width: 23rpx;
+	height: 23rpx;
+	vertical-align: middle;
+	margin-right: 6px;
+}
+.mianinfo {
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-flow: column nowrap;
+	        flex-flow: column nowrap;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	        align-items: center;
+	border-top-left-radius: 30rpx;
+	border-top-right-radius: 30rpx;
+}
+.empty {
+	width: 100%;
+	height: 500rpx;
+}
+.mian {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(50, 36, 185, 0.0);
+	position: absolute;
+	z-index: 99;
+}
+.ablum {
+	width: 100%;
+}
+.up {
+	position: fixed;
+	width: 100%;
+	height: 750rpx;
+	background-repeat: repeat;
+	background-size: 100% 100%;
+	background-position: 0 -180rpx;
+}
+

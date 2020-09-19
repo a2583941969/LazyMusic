@@ -3,7 +3,7 @@
   <view class="Live-Band">
     <view class="Singer-info">
       <!-- 歌手信息 -->
-      <navigator url="/pages/SingerDetails/SingerDetails" open-type="navigate">
+      <navigator :url="'/pages/artist/artist?id='+singerId" open-type="navigate" hover-class="none">
         <!-- 歌手头像 -->
         <view class="Singer-avatar">
           <image :src="SingerAvatar" mode="widthFix"></image>
