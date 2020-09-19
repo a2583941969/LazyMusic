@@ -7,7 +7,8 @@
           <uni-search-bar :radius="100" v-model="value" cancelButton="none" placeholder="搜索音乐、歌手、专辑" bgColor="#fff"></uni-search-bar>
         </view>
         <view class="search-cancel">
-          <navigator open-type="navigateBack">取消</navigator>
+          <!-- <navigator>取消</navigator> -->
+         <view class=""  @click.native="goIndex">取消</view>
         </view>
       </view>
       <view class="SegmentedControl">
@@ -163,6 +164,13 @@
           animationType: "none"
         })
       },
+      // 返回首页
+      goIndex(){
+        uni.navigateTo({
+          url:'/pages/index/index',
+          animationType:'none'
+        })
+      }
     },
     watch: {
       value() {
