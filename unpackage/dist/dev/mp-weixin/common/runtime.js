@@ -105,11 +105,11 @@
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"myComponents/my-alnum/myAlnum":1};
+/******/ 		var cssChunks = {"myComponents/click-to-play/click-to-play":1,"myComponents/my-LiveBand/myLiveBand":1,"myComponents/my-alnum/myAlnum":1,"myComponents/my-songlist/mySongList":1,"myComponents/my-tabbar/myTabbar":1,"components/uni-search-bar/uni-search-bar":1,"components/uni-popup/uni-popup":1,"components/uni-icons/uni-icons":1,"components/uni-transition/uni-transition":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "" + ({"myComponents/my-alnum/myAlnum":"myComponents/my-alnum/myAlnum","myComponents/my-songlist/mySongList":"myComponents/my-songlist/mySongList"}[chunkId]||chunkId) + ".wxss";
+/******/ 				var href = "" + ({"myComponents/click-to-play/click-to-play":"myComponents/click-to-play/click-to-play","myComponents/my-LiveBand/myLiveBand":"myComponents/my-LiveBand/myLiveBand","myComponents/my-alnum/myAlnum":"myComponents/my-alnum/myAlnum","myComponents/my-songlist/mySongList":"myComponents/my-songlist/mySongList","myComponents/my-tabbar/myTabbar":"myComponents/my-tabbar/myTabbar","components/uni-search-bar/uni-search-bar":"components/uni-search-bar/uni-search-bar","components/uni-popup/uni-popup":"components/uni-popup/uni-popup","components/uni-icons/uni-icons":"components/uni-icons/uni-icons","components/uni-transition/uni-transition":"components/uni-transition/uni-transition"}[chunkId]||chunkId) + ".wxss";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {

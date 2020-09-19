@@ -1,0 +1,8 @@
+{
+  "onReachBottomDistance": 10,
+  "usingComponents": {
+    "uni-search-bar": "/components/uni-search-bar/uni-search-bar",
+    "my-songlist": "/myComponents/my-songlist/mySongList",
+    "my-alnum": "/myComponents/my-alnum/myAlnum"
+  }
+}
