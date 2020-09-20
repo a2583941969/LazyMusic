@@ -187,7 +187,7 @@ export default {
           item.picUrl = item.picUrl + "?imageView=1&type=webp&thumbnail=246x0"; // 将图片路径拼接上移动端使用的路径
           this.info.push(item);
         });
-        console.log(res);
+        console.log(res)
       });
     },
     // 点击播放歌曲
