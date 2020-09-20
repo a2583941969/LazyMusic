@@ -34,6 +34,7 @@
 		// props: ["AlbumImg", "AlbumName", "singer",songLength，songName],
 		data() {
 			return {
+				id:'',
 				albumPicUrl:''		
 			}
 		},
@@ -42,6 +43,7 @@
 				console.log(params)
 				//如果当前是一首歌
 				if(params.songid){
+					this.id = params.songid;
 					// 获取歌曲的音频地址
 					this.getSong(params.songid);
 					//获取歌曲的详细信息
@@ -118,7 +120,7 @@
 			//点击底部音乐栏就去歌曲单页
 		toSong(){
 			uni.navigateTo({
-				url:`../../pages/song/song?albumPic=${this.albumPicUrl}`
+				url:`../../pages/song/song?albumPic=${this.albumPicUrl}&id=${this.id}`
 			});
 		},
 		playMusic(){

@@ -7,8 +7,8 @@ export default new Vuex.Store({
   state: {
 	musicOn:false,
 	audioEle:'',
-	songLength:'',
-	currentTime:'',
+	songLength:0,
+	currentTime:0,
 	// 正在的播放的歌曲所在列表
 	onPlayList:[],
 	singer:'',

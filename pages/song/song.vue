@@ -16,7 +16,7 @@
 						<text class="singer">{{this.store.state.singer}}</text>
 					</view>
 					<view class="lyric">
-						
+							<text style="color:#007AFF">{{currentLrc}}</text>
 					</view>
 					<view class="process">
 						<slider backgroundColor="#7f8fa6" activeColor="#fad390" :value="this.store.state.currentTime" min="0" :max="this.store.state.songLength"
@@ -70,70 +70,56 @@
 </template>
 
 <script>
+	import Lyric from 'lyric-parser';
 	export default {
 		data() {
 			return {
-				id: 1463168014,
-				bgimage: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1599988611425&di=868b6430664d42152e80dd2a01c4866a&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201511%2F21%2F20151121140727_JuM5a.jpeg',
-				albumName: null,
-				singer: null,
-				songUrl: '',
+				id: null,
+				//背景图片
+				bgimage: '',
+				//是否在播放
 				isPlay: true,
-				songName: '',
-				lyric: [],
-				showLrc: ''
+				//显示出来，在页面展示的歌词
+				currentLrc: '',
+				//定义一个当前歌词播放到哪儿的一个行数,初始化为0
+				currentLrcNum:0
 			}
 		},
 		onLoad(options) {
 			//获取传过来的专辑图片
 			this.bgimage = options.albumPic
+			this.id =options.id;
+			// console.log(this.id);
+			//利用获取的歌曲id 查询当前歌曲的歌词
+			this.getLyric(this.id);
 		},
 		methods: {
+			//处理实例化歌词的回调
+			handler({lineNum,txt}){
+				//获取当前播放的行数
+				this.currentLrcNum = lineNum;
+				this.currentLrc =txt
+			},
 			//获取歌词
 			async getLyric(id) {
 				let res = await this.$myReq({
 					url: 'lyric?id=' + id,
 					methods: 'GET'
 				});
-				// console.log(res.data.lrc)
-				// let {
-				// 	lyric
-				// } = res.data.lrc;
-				// let arrLyric = lyric.split('\n')
-				// // 正则表达式匹配歌词前缀
-				// let regExp = /\[(\d*(\:)*\d*\.\d*)\]/g;
-				// let time = [];
-				// arrLyric.forEach((item) => {
-				// 	let arr = item.split("]")
-				// 	//获取分钟数
-				// 	let mins = arr[0].substring(1).split(":")[0];
-				// 	//获取秒数
-				// 	let sec = arr[0].substring(1).split(":")[1];
-				// 	//转换成秒数
-				// 	let timer = (mins * 60) + (sec * 1);
-				// 	timer = Number(timer.toString().split(".")[0])
-
-				// 	let obj = {
-				// 		time: timer,
-				// 		geci: arr[1]
-				// 	}
-				// 	time.push(obj);
-				// })
-				// //从数组的末尾删除一个空的成员
-				// time.pop();
-				// console.log(time)
-				// //遍历这个time，如果time的时间节点与当前播放的事件节点重复，那么我就让对应的歌词显示在页面上
-				// let {
-				// 	audioEle
-				// } = this.store.state;
-
-
-				// let lyrics = lyric.replace(regExp, '');
-				// console.log(lyrics)
-				// // 正则匹配换行转义字符
-				// let reg = /\n/g;
-				// let arrLrc = lyrics.split(reg)
-				// this.lyric = arrLrc
+				let {
+					lyric
+				} = res.data.lrc;
+				let {musicOn} = this.store.state;
+				// 如果这首歌有歌词的话
+				if(lyric){
+					//初始化歌词实例的时候，第一个参数是获取的歌词数据，第二个是处理播放状态的回调函数
+					this.currentLrc = new Lyric(lyric,this.handler);
+					if(musicOn){
+						this.currentLrc.play();
+					}
+				}else{
+					this.showLrc ="暂无歌词"
+				}
 			},
 			sliderChange(e) {
 				// console.log(e.target.value)
@@ -166,25 +152,11 @@
 					audioEle.pause();
 				} else {
 					// 否则就让他播放
-
 					audioEle.play();
 				}
 				this.store.state.musicOn = !this.store.state.musicOn
 			}
 		},
-		// onShow() {
-
-		// 	//页面每次渲染完成
-		// 	// 取出状态管理器的audio实例
-		// 	let {
-		// 		audioEle
-		// 	} = this.store.state
-		// 	//获取当前实例的播放位置，赋值给进度条的value
-
-		// 	this.newVal = audioEle.currentTime
-
-		// },
-
 	}
 </script>
 
@@ -195,11 +167,12 @@ page {color: #FFFFFF;}
 .playPage>.song{width: 100%;height: 80vh;}
 .playPage>.song::before{content:'';display: block;width: 100%;height:70%;bottom: 0; position: absolute;z-index: -1;background: linear-gradient(top,#FFFFFF00,#1d283d,#1d283d,#1d283d,#1d283d,#172238);}
 .playPage>.song::after{content:'';display: block;width: 100%;height:100%;position: absolute;top:0;z-index: -2;background: linear-gradient(bottom,#172238,#FFFFFF00);}
-.process{margin-top: 200rpx;}
+.process{margin-top: -120rpx;}
 .playPage .playBox .more {width: 750rpx;display: flex;flex-wrap: nowrap;justify-content: center;}
 .playPage .playBox .more>view {margin-top: 50rpx;width: 50rpx;height: 50rpx;font-size: 12rpx;}
-.playPage .lyric {margin: 30rpx 90rpx;font-size: 30rpx;overflow: hidden;height: 150rpx;margin-bottom: 110rpx;text-align: center;}
+.playPage .lyric {margin-top: 120rpx; font-size: 40rpx;overflow: hidden;height: 300rpx;margin-bottom: 110rpx;text-align: center;}
 .playPage .playBox .more>view>image {width: 100%;height: 100%;}
+.lyric-wrapper .lyricItem{color:gray;line-height:60rpx;}
 .playPage .playBox .more>view:nth-child(2) {margin-left: 70rpx;margin-right: 70rpx;}
 .playPage .playControl {margin-top: 200rpx;display: flex;flex-wrap: nowrap;justify-content: space-around;}
 .playPage .playControl>image {width: 50rpx;height: 50rpx;}.playPage .playControl>image:nth-child(3) {width: 150rpx;height: 150rpx;}
